@@ -58,3 +58,17 @@ test("create, simulate a season, view results, advance, and share", async ({ pag
   await page.getByTestId("tab-creator").click();
   await expect(page.getByRole("heading", { name: /Goal Table/i })).toBeVisible();
 });
+
+test("championship split (§6): top division splits into two groups", async ({ page }) => {
+  await page.goto("./");
+  await page.getByLabel(/Championship split/i).check();
+  await page.getByRole("button", { name: /Create league/i }).click();
+  await page.getByTestId("sim-season").click();
+  await expect(page.getByTestId("season-complete")).toBeVisible();
+
+  // The top division's table now shows Championship/Regular-season group tabs.
+  await page.getByTestId("tab-table").click();
+  await expect(page.getByRole("button", { name: /Championship group/i })).toBeVisible();
+  await page.getByRole("button", { name: /Championship group/i }).click();
+  await expect(page.locator("table.grid tbody tr").first()).toBeVisible();
+});

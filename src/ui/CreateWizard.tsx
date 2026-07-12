@@ -25,6 +25,7 @@ export function CreateWizard({ onCreate }: { onCreate: (league: LeagueSystem) =>
   });
   const [ownership, setOwnership] = useState<"capitalistic" | "mix" | "fans">("mix");
   const [statChanges, setStatChanges] = useState<"normal" | "slow" | "static">("normal");
+  const [champSplit, setChampSplit] = useState(false);
 
   function build(bp?: Partial<CreateBlueprint>): LeagueSystem {
     const levelBlueprints = Array.from({ length: levels }, (_, li) => ({
@@ -35,10 +36,12 @@ export function CreateWizard({ onCreate }: { onCreate: (league: LeagueSystem) =>
         teams: teamsPerDivision,
       })),
     }));
+    const topN = Math.max(2, Math.min(6, Math.floor(teamsPerDivision / 2)));
     const blueprint: CreateBlueprint = {
       name, seed, matchesPerPairing, levels: levelBlueprints,
       rules: { ...toggles, climate, ownership, statChanges },
       relegationCount: 2, promotionCount: 2,
+      championshipSplit: champSplit && teamsPerDivision > topN ? { topN, carry: "full", matchesPerPairing: 1 } : undefined,
       ...bp,
     };
     const league = createLeague(new RNG(seed), blueprint);
@@ -103,6 +106,7 @@ export function CreateWizard({ onCreate }: { onCreate: (league: LeagueSystem) =>
       <h3>Rules &amp; toggles</h3>
       <div className="grid2">{(Object.keys(toggles) as (keyof typeof toggles)[]).map(t)}</div>
       <label className="check"><input type="checkbox" checked={cup} onChange={(e) => setCup(e.target.checked)} /> Include a national cup (knockout)</label>
+      <label className="check"><input type="checkbox" checked={champSplit} onChange={(e) => setChampSplit(e.target.checked)} /> Championship split — top division splits into two groups after the regular season (§6)</label>
 
       <div className="row" style={{ marginTop: "1rem" }}>
         <button className="btn primary" onClick={quickStart}>Create league ▸</button>

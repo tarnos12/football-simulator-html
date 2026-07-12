@@ -5,6 +5,7 @@
 
 import type { LeagueSystem } from "../model/types";
 import type { SeasonState } from "./types";
+import { combinedFinalTable } from "./phases";
 
 export interface DivisionOutcome {
   divisionId: string;
@@ -27,9 +28,9 @@ export function seasonSummary(league: LeagueSystem, season: SeasonState): Season
 
   league.levels.forEach((level, li) => {
     for (const div of level.divisions) {
-      const ds = season.divisions.find((d) => d.divisionId === div.id);
-      if (!ds) continue;
-      const order = ds.table.map((r) => r.teamId);
+      const combined = combinedFinalTable(season, div.id);
+      if (combined.length === 0) continue;
+      const order = combined.map((r) => r.teamId);
       const phase = div.phases[div.phases.length - 1];
       const outcome: DivisionOutcome = {
         divisionId: div.id,

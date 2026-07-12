@@ -41,6 +41,8 @@ export interface CreateBlueprint {
   teamNames?: string[];
   promotionCount?: number;
   relegationCount?: number;
+  /** Optional championship split on the top division after the main season (§6). */
+  championshipSplit?: { topN: number; carry: "full" | "zero" | "half"; matchesPerPairing: number };
 }
 
 export function createLeague(rng: RNG, bp: CreateBlueprint): LeagueSystem {
@@ -64,24 +66,32 @@ export function createLeague(rng: RNG, bp: CreateBlueprint): LeagueSystem {
         ? distributeGeographic(poolIds, teams, sizes)
         : distributeRandom(rng, poolIds, sizes);
 
-    const divisions: Division[] = levelBp.divisions.map((divBp, di) => ({
-      id: `L${li}D${di}`,
-      name: divBp.name,
-      teamIds: groups[di] ?? [],
-      phases: [
-        {
-          name: "Season",
-          matchesPerPairing: bp.matchesPerPairing,
-          thresholds: defaultThresholds(
-            li,
-            bp.levels.length,
-            divBp.teams,
-            bp.promotionCount ?? 2,
-            bp.relegationCount ?? 2,
-          ),
-        },
-      ],
-    }));
+    const divisions: Division[] = levelBp.divisions.map((divBp, di) => {
+      const thresholds = defaultThresholds(
+        li, bp.levels.length, divBp.teams, bp.promotionCount ?? 2, bp.relegationCount ?? 2,
+      );
+      const split = li === 0 && bp.championshipSplit && divBp.teams > bp.championshipSplit.topN
+        ? bp.championshipSplit
+        : null;
+      const phases: Division["phases"] = split
+        ? [
+            {
+              name: "Regular season",
+              matchesPerPairing: bp.matchesPerPairing,
+              thresholds: [],
+              split: {
+                carry: split.carry,
+                groups: [
+                  { name: "Championship group", fromPos: 1, toPos: split.topN },
+                  { name: "Relegation group", fromPos: split.topN + 1, toPos: divBp.teams },
+                ],
+              },
+            },
+            { name: "Championship split", matchesPerPairing: split.matchesPerPairing, thresholds },
+          ]
+        : [{ name: "Season", matchesPerPairing: bp.matchesPerPairing, thresholds }];
+      return { id: `L${li}D${di}`, name: divBp.name, teamIds: groups[di] ?? [], phases };
+    });
     return { id: `L${li}`, name: levelBp.name, divisions, split: levelBp.split };
   });
 

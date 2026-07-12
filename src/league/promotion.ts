@@ -12,6 +12,7 @@ import { cloneLeague } from "../model/serialize";
 import type { LeagueSystem } from "../model/types";
 import type { SeasonState } from "./types";
 import { distributeGeographic, distributeRandom } from "./geographic";
+import { combinedFinalTable } from "./phases";
 
 export interface ProRelChange {
   teamId: string;
@@ -31,9 +32,9 @@ function divisionBands(league: LeagueSystem, season: SeasonState): DivBands[] {
   const bands: DivBands[] = [];
   league.levels.forEach((level, levelIndex) => {
     for (const div of level.divisions) {
-      const ds = season.divisions.find((d) => d.divisionId === div.id);
-      if (!ds) continue;
-      const order = ds.table.map((r) => r.teamId);
+      const combined = combinedFinalTable(season, div.id);
+      if (combined.length === 0) continue;
+      const order = combined.map((r) => r.teamId);
       const phase = div.phases[div.phases.length - 1];
       const promoted: string[] = [];
       const relegated: string[] = [];

@@ -69,6 +69,8 @@ export function createSeason(
       startingPoints: sp,
       table: [],
       markers: [],
+      sourceDivisionId: div.id,
+      phaseIndex: 0,
     };
     ds.table = orderTable(computeTable(div.teamIds, schedule, rules, sp), schedule, rules);
     return ds;
@@ -92,7 +94,7 @@ export function simulateMatch(
   if (match.result) return;
   const leagueDivision = league.levels
     .flatMap((l) => l.divisions)
-    .find((d) => d.id === div.divisionId)!;
+    .find((d) => d.id === div.sourceDivisionId)!;
   const rules = divisionRules(league, leagueDivision);
   const home = league.teams[match.homeId];
   const away = league.teams[match.awayId];
@@ -110,7 +112,7 @@ export function simulateMatch(
 export function refreshDivisionTable(league: LeagueSystem, div: DivisionSeason): void {
   const leagueDivision = league.levels
     .flatMap((l) => l.divisions)
-    .find((d) => d.id === div.divisionId)!;
+    .find((d) => d.id === div.sourceDivisionId)!;
   const rules = divisionRules(league, leagueDivision);
   const rows = computeTable(div.teamIds, div.schedule, rules, div.startingPoints);
   const ordered = orderTable(rows, div.schedule, rules);

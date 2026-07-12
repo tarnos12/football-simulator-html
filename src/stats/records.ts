@@ -9,6 +9,7 @@
 import type { LeagueSystem, MatchResult, TableRow } from "../model/types";
 import type { SeasonState } from "../league/types";
 import { seasonSummary } from "../league/summary";
+import { combinedFinalTable, allResultsForSource } from "../league/phases";
 
 export interface DivisionArchive {
   divisionId: string;
@@ -31,14 +32,19 @@ export function archiveSeason(league: LeagueSystem, season: SeasonState): Season
   const levelIndexOf = new Map<string, number>();
   league.levels.forEach((l, i) => l.divisions.forEach((d) => levelIndexOf.set(d.id, i)));
 
-  const divisions: DivisionArchive[] = season.divisions.map((ds) => {
-    const divSummary = summary.divisions.find((d) => d.divisionId === ds.divisionId);
+  // Archive once per source (model) division, using its combined final standings
+  // and results across every phase — so split leagues aren't double-counted.
+  const sourceIds = [...new Set(season.divisions.map((d) => d.sourceDivisionId))];
+  const divisions: DivisionArchive[] = sourceIds.map((sourceId) => {
+    const ds = season.divisions.find((d) => d.sourceDivisionId === sourceId)!;
+    const divSummary = summary.divisions.find((d) => d.divisionId === sourceId);
+    const combined = combinedFinalTable(season, sourceId);
     return {
-      divisionId: ds.divisionId,
+      divisionId: sourceId,
       name: ds.name,
-      levelIndex: levelIndexOf.get(ds.divisionId) ?? 0,
-      finalTable: ds.table.map((r) => ({ ...r, positionHistory: [...r.positionHistory] })),
-      results: ds.schedule.filter((m) => m.result).map((m) => m.result as MatchResult),
+      levelIndex: levelIndexOf.get(sourceId) ?? 0,
+      finalTable: combined.map((r) => ({ ...r, positionHistory: [...r.positionHistory] })),
+      results: allResultsForSource(season, sourceId),
       championId: divSummary?.championId,
       relegated: divSummary?.relegated ?? [],
     };
