@@ -11,7 +11,10 @@ Live status of the phased build so any session can resume cold. Updated in the
 | 2 — Match engine (`sim/`) | ✅ Done | `Phase-2` | ✅ |
 | 3 — League play (`league/`, `stats/`) | ✅ Done | `Phase-3` | ✅ |
 | 4 — Systemic flavour (`systems/`) | ✅ Done | `Phase-4` | ✅ |
-| 5 — Seasons, cups & full UI (`ui/`) | ✅ Done | `Phase-5` | pending |
+| 5 — Seasons, cups & full UI (`ui/`) | ✅ Done | `Phase-5` | ✅ |
+| 6 — Creator tools, editors & fuller stats | ✅ Done | `Phase-6` | pending |
+| 7 — Multi-phase leagues (§6,§15) | ⏳ Next | `Phase-7` | — |
+| 8 — International (§19) + cup refinements | ⬜ Pending | `Phase-8` | — |
 
 ## Phase 1 — delivered
 
@@ -137,6 +140,19 @@ build + Playwright e2e) and **deployed live**.
 so `deploy.yml` builds and publishes `dist/` to `gh-pages` (the app replaced the
 old landing page). If you later switch Pages to "GitHub Actions" as the source,
 swap back to an `upload-pages-artifact` + `deploy-pages` workflow.
+
+## Phase 6 — delivered (gap-closing after full GDD/Excel audit)
+
+Audit found the core loop was faithful but several documented features were missing.
+Phase 6 closes the self-contained ones:
+- **Edit-Division mass grid** (§5/§21) — all teams' stats in one editable screen.
+- **Jersey editor** (§21) — 2–3 shirt/short colours + pattern, live preview; reachable from team card and edit grid.
+- **Coach-attribute hand-editing** (§12) in the team card.
+- **Editable hidden tables wired into the sim** (§23): Goal Table + corruption/crowd reason lists persist to `configOverrides` and are read by the match engine / systems (`model/config-resolve.ts`).
+- **Per-division rule overrides** + **reorderable tie-breaks** (§7).
+- **"Last 5 (Form)" table sub-view** (§21); **single-match simulation** (§4).
+- **Fuller §20 records** (highest/lowest winning points, title margins, points to stay up, most-points-relegated, goals/GD extremes, highest-scoring draw) + **browsable past-season final tables**.
+- Tests: 64 Vitest (6 new) + e2e extended (sim-match, edit grid, editable goal table). League-strength + goalTable plumbing added to the match engine for Phase 7/8.
 
 ## Discrepancies logged
 

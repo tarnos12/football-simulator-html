@@ -22,6 +22,7 @@ export function applyCrowdIncidents(
   away: Team,
   rules: LeagueRules,
   rng: RNG,
+  reasons: string[] = [...CROWD.reasons],
 ): void {
   if (!rules.crowdTrouble) return;
 
@@ -32,11 +33,11 @@ export function applyCrowdIncidents(
   let homePunished = false;
   let awayPunished = false;
   if (homeIncident) {
-    result.incidents.push({ kind: "crowd", teamId: home.id, reason: rng.pick(CROWD.reasons) });
+    result.incidents.push({ kind: "crowd", teamId: home.id, reason: rng.pick(reasons) });
     homePunished = rng.chance(CROWD.punishmentChance);
   }
   if (awayIncident) {
-    result.incidents.push({ kind: "crowd", teamId: away.id, reason: rng.pick(CROWD.reasons) });
+    result.incidents.push({ kind: "crowd", teamId: away.id, reason: rng.pick(reasons) });
     awayPunished = rng.chance(CROWD.punishmentChance);
   }
 

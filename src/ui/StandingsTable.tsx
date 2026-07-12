@@ -1,11 +1,12 @@
 import { useState } from "react";
 import type { Campaign } from "../game/campaign";
-import { computeTable, orderTable, goalDiff } from "../league/standings";
+import { computeTable, computeFormTable, orderTable, goalDiff } from "../league/standings";
 import { thresholdLabelForPosition } from "../league/summary";
 import { MiniJersey } from "./Jersey";
 import { PositionChart } from "./PositionChart";
 
-type Venue = "all" | "home" | "away";
+type Venue = "all" | "home" | "away" | "form";
+const LAST_N = 5;
 
 /** Division standings (§21): jersey, name, P, W-D-L, GF-GA, GD, points, movement,
  *  threshold pill, corruption/crowd markers; Home/Away sub-views; position chart. */
@@ -28,7 +29,9 @@ export function StandingsTable({
   const rows =
     venue === "all"
       ? div.table
-      : orderTable(computeTable(div.teamIds, div.schedule, rules, div.startingPoints, venue), div.schedule, rules);
+      : venue === "form"
+        ? orderTable(computeFormTable(div.teamIds, div.schedule, rules, LAST_N), div.schedule, rules)
+        : orderTable(computeTable(div.teamIds, div.schedule, rules, div.startingPoints, venue), div.schedule, rules);
 
   const markerFor = (teamId: string) => div.markers?.filter((m) => m.teamId === teamId) ?? [];
   const teamName = (id: string) => campaign.league.teams[id].name;
@@ -38,9 +41,9 @@ export function StandingsTable({
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h2 style={{ margin: 0 }}>{div.name}</h2>
         <div className="tabs" style={{ margin: 0 }}>
-          {(["all", "home", "away"] as Venue[]).map((v) => (
+          {(["all", "home", "away", "form"] as Venue[]).map((v) => (
             <button key={v} className={`tab ${venue === v ? "active" : ""}`} onClick={() => setVenue(v)}>
-              {v === "all" ? "Overall" : v[0].toUpperCase() + v.slice(1)}
+              {v === "all" ? "Overall" : v === "form" ? `Last ${LAST_N}` : v[0].toUpperCase() + v.slice(1)}
             </button>
           ))}
         </div>

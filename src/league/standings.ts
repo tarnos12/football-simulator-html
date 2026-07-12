@@ -66,6 +66,29 @@ function applyResult(row: TableRow, gf: number, ga: number, rules: LeagueRules):
   }
 }
 
+/** A "form" table over each team's last N played matches (§21 Last-X view). */
+export function computeFormTable(
+  teamIds: readonly string[],
+  schedule: readonly ScheduledMatch[],
+  rules: LeagueRules,
+  lastN: number,
+): TableRow[] {
+  const rows = new Map<string, TableRow>();
+  for (const id of teamIds) rows.set(id, emptyRow(id, 0));
+  const played = schedule.filter((m) => m.result).sort((a, b) => a.round - b.round);
+  for (const id of teamIds) {
+    const mine = played.filter((m) => m.homeId === id || m.awayId === id).slice(-lastN);
+    const row = rows.get(id)!;
+    for (const m of mine) {
+      const r = m.result!;
+      const gf = m.homeId === id ? r.homeGoals : r.awayGoals;
+      const ga = m.homeId === id ? r.awayGoals : r.homeGoals;
+      applyResult(row, gf, ga, rules);
+    }
+  }
+  return [...rows.values()];
+}
+
 export const goalDiff = (r: TableRow): number => r.goalsFor - r.goalsAgainst;
 
 /** Order rows into final table positions using the configured tie-break chain. */

@@ -19,6 +19,7 @@ import { computeAttendance } from "./attendance";
 import { applyCrowdIncidents } from "./crowd";
 import { updateForm } from "./form";
 import type { SeasonOutcome } from "./progression";
+import { crowdReasons } from "../model/config-resolve";
 
 function rulesFor(league: LeagueSystem, div: Division): LeagueRules {
   return { ...league.rules, ...(div.rulesOverride ?? {}) };
@@ -76,7 +77,7 @@ export function flavourHooks(league: LeagueSystem): SimHooks {
         { weather: result.weather, weatherEnabled: rules.weather, derby: result.derby },
         rng,
       );
-      applyCrowdIncidents(result, home, away, rules, rng);
+      applyCrowdIncidents(result, home, away, rules, rng, crowdReasons(lg));
       if (rules.form) {
         updateForm(home, rng);
         updateForm(away, rng);
