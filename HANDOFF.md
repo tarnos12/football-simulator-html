@@ -65,7 +65,7 @@ it; `PROJECT.md` is the team-facing plan. For a *value*, the workbook wins.
 | `*.test.ts`, `e2e/` | Test Author | Vitest + Playwright |
 | `.github/workflows/deploy.yml` | Lead/infra | Build + Pages deploy |
 
-## 4. Team roster (bench — keep 3–5 live per phase)
+## 4. Team roster (bench — up to 10 live per phase)
 
 Name teammates `[Role]-[Model]-[Task]`. Set each model explicitly at spawn (teammates don't inherit
 the lead's). Give each spawn prompt: what already exists in its module, the frozen interface

@@ -95,7 +95,7 @@ community can recreate real-world leagues with no licensing cost. Design authori
 
 ## Instantiated roster (map `CLAUDE.md` archetypes → this project)
 
-Spawn only the **3–5** the current phase needs. *(subagent)* roles are spawned by the relevant
+Spawn as many as the current phase needs, up to **10 live**. *(subagent)* roles are spawned by the relevant
 teammate. Name teammates `[Role]-[Model]-[Task]` and set each model explicitly at spawn.
 
 | Role | Model | Owns / does |
