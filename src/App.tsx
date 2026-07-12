@@ -5,13 +5,14 @@ import { CreateWizard } from "./ui/CreateWizard";
 import { StandingsTable } from "./ui/StandingsTable";
 import { ResultsView } from "./ui/ResultsView";
 import { CupView } from "./ui/CupView";
+import { LocationMap } from "./ui/LocationMap";
 import { StatsView } from "./ui/StatsView";
 import { CreatorTools } from "./ui/CreatorTools";
 import { SeasonSummary } from "./ui/SeasonSummary";
 import { TeamCardModal } from "./ui/TeamCardModal";
 import { ShareBar } from "./ui/ShareBar";
 
-type Tab = "table" | "results" | "cup" | "summary" | "stats" | "creator";
+type Tab = "table" | "results" | "map" | "cup" | "summary" | "stats" | "creator";
 
 export function App() {
   const { campaign, start, act, reset } = useCampaign();
@@ -36,6 +37,7 @@ export function App() {
   const tabs: { id: Tab; label: string; show: boolean }[] = [
     { id: "table", label: "Table", show: true },
     { id: "results", label: "Results", show: true },
+    { id: "map", label: "Map", show: true },
     { id: "cup", label: "Cup", show: !!campaign.cup },
     { id: "summary", label: "Summary", show: complete },
     { id: "stats", label: "History", show: true },
@@ -78,6 +80,7 @@ export function App() {
 
       {activeTab === "table" && divisionId && <StandingsTable campaign={campaign} divisionId={divisionId} onOpenTeam={setTeamModal} />}
       {activeTab === "results" && divisionId && <ResultsView campaign={campaign} divisionId={divisionId} onOpenTeam={setTeamModal} />}
+      {activeTab === "map" && <LocationMap campaign={campaign} divisionId={divisionId} onOpenTeam={setTeamModal} />}
       {activeTab === "cup" && <CupView campaign={campaign} act={act} />}
       {activeTab === "summary" && <SeasonSummary campaign={campaign} />}
       {activeTab === "stats" && <StatsView history={campaign.history} teams={campaign.league.teams} />}

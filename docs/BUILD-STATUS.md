@@ -112,7 +112,7 @@ Excel; no raw numbers leak to players (icons/markers only). ✔
   `ResultsView` (weather icons + tooltips, `Full (HT)` scores, attendance,
   derby/motivation/incident/OT markers, week nav), `TeamCardModal` (+ edit, change
   highlights), `CupView` (bracket/groups), `SeasonSummary`, `StatsView` (§20),
-  `CreatorTools` (rules editing + hidden Goal Table + reason lists), `ShareBar`
+  `LocationMap` (the §11 grid map — teams plotted on the −10…+10 grid, whole-league/division view, weather overlay), `CreatorTools` (rules editing + hidden Goal Table + reason lists), `ShareBar`
   (export/import share code), `Jersey` (SVG mini/preview), `PositionChart`.
 - **CI:** `.github/workflows/ci.yml` (typecheck + Vitest + build + Playwright);
   `deploy.yml` publishes to Pages on `main`.

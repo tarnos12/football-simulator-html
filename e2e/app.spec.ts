@@ -31,6 +31,11 @@ test("create, simulate a season, view results, advance, and share", async ({ pag
   await page.getByTestId("tab-results").click();
   await expect(page.locator(".result-row").first()).toBeVisible();
 
+  // Location map renders the grid with team markers.
+  await page.getByTestId("tab-map").click();
+  await expect(page.getByRole("heading", { name: /Location map/i })).toBeVisible();
+  await expect(page.locator("svg[aria-label='Team location map'] circle").first()).toBeVisible();
+
   // Summary names a champion.
   await page.getByTestId("tab-summary").click();
   await expect(page.getByText(/Champions:/)).toBeVisible();
