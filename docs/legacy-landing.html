@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Football Simulator (HTML)</title>
+  <meta name="description" content="A god-mode fantasy football league simulator — create leagues, set the rules, simulate seasons." />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #131a30;
+      --ink: #e8ecf6;
+      --muted: #9aa6c4;
+      --accent: #3ddc84;
+      --accent-2: #4aa8ff;
+      --line: #24304f;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f6fb; --panel: #ffffff; --ink: #131a30;
+        --muted: #566080; --accent: #12a150; --accent-2: #1f6feb; --line: #e2e7f2;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 70% -10%, rgba(74,168,255,.18), transparent 60%), var(--bg);
+      color: var(--ink); line-height: 1.55; min-height: 100vh;
+    }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 4rem 1.25rem 5rem; }
+    .pitch {
+      font-size: .8rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--accent); font-weight: 700;
+    }
+    h1 { font-size: clamp(2rem, 6vw, 3.2rem); margin: .3rem 0 .6rem; line-height: 1.05; }
+    .lede { font-size: 1.15rem; color: var(--muted); max-width: 46rem; }
+    .cta { display: flex; flex-wrap: wrap; gap: .75rem; margin: 2rem 0 3rem; }
+    .btn {
+      display: inline-block; text-decoration: none; font-weight: 600;
+      padding: .7rem 1.15rem; border-radius: .6rem; border: 1px solid var(--line);
+      color: var(--ink); background: var(--panel); transition: transform .05s ease, border-color .2s;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: var(--accent-2); }
+    .btn.primary { background: linear-gradient(180deg, var(--accent-2), #2f7fe0); color: #fff; border-color: transparent; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: .8rem; padding: 1.1rem 1.2rem; }
+    .card h3 { margin: 0 0 .35rem; font-size: 1.02rem; }
+    .card p { margin: 0; color: var(--muted); font-size: .93rem; }
+    footer { margin-top: 3.5rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 1.5rem; }
+    a.inline { color: var(--accent-2); }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="pitch">⚽ Sandbox League Simulator</div>
+    <h1>Football Simulator <span style="color:var(--muted);font-weight:400;">(HTML)</span></h1>
+    <p class="lede">
+      A god-mode fantasy football league simulator. You don't manage a team —
+      you <strong>create the whole pyramid</strong>: levels, divisions, teams and
+      rules. Then you simulate seasons and watch an emergent story unfold, tuning
+      weather, attendance, corruption, coaches, form and randomness along the way.
+    </p>
+
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/tarnos12/football-simulator-html/blob/main/GDD.md">Read the Game Design Document</a>
+      <a class="btn" href="https://github.com/tarnos12/football-simulator-html">View on GitHub</a>
+    </div>
+
+    <div class="grid">
+      <div class="card"><h3>🏗️ Creator-first</h3><p>Design league systems with levels, divisions, phases and thresholds — go default or go wild.</p></div>
+      <div class="card"><h3>🎲 Dice-driven sim</h3><p>Two-half match engine using an Attack-vs-Defence goal table, coach rolls and modifiers.</p></div>
+      <div class="card"><h3>🌦️ Systemic flavour</h3><p>Weather, attendance, derbies, motivation, corruption and crowd trouble add drama.</p></div>
+      <div class="card"><h3>🔗 Shareable</h3><p>Whole league systems are user-generated and shareable — recreate real leagues, licence-free.</p></div>
+    </div>
+
+    <footer>
+      Prototype in progress. Design authority: <a class="inline" href="https://github.com/tarnos12/football-simulator-html/blob/main/GDD.md">GDD.md</a>.
+      This page is served via GitHub Pages from the <code>gh-pages</code> branch.
+    </footer>
+  </main>
+</body>
+</html>
