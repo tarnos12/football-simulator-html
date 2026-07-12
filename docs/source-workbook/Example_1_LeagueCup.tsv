@@ -1,0 +1,149 @@
+
+	PHASE ONE				PHASE TWO					PHASE THREE					PHASE FOUR					PHASE FIVE				PHASE SIX - RESTART PHASE ONE
+																				CHANGES				NEW SEASON
+	Top Division - 10 teams 1 division				Top Division - 6 teams 1 divsion					Quali games to Top Division - 8 teams 4 games					Quali games  - 4 teams 2 games
+	Div 1 - 20 teams 2 divsions				Quali League - 8 teams 1 division					Quali games to Div 1  - 4 teams 2 games					Each game is played over two matches, one home one away					All the random changes are generated for next season				Somewhere here it should also be possible to do changes to the league system in total
+	Div 2 - 32 teams  4 divisions				Div 1 - 16 teams 2 divisions					Each game is played over two matches, one home one away										Club ownership				Number of teams, divisions and so forth.
+					Div 2 Qualification - 16 teams 2 divisions															Club Size
+					Div 2 - 16 teams 2 divisions					Qualification Games - winners go to phase four					Qualification Games - to Top Divison					Club Organisation				Restart the season with the new set of teams in the divisions
+	Top Division	-> Next phase								Quali League 3rd place vs Div 1 least points					Winner match 1 prev phase vs Winner match 2 prev phase					Team Stats (Att, Def, Sta)				Top Division- 10 teams 1 division
+	1	Top Division								Quali League 6th place vs Div 1 most points					Winner match 3 prev phase vs Winner match 4 prev phase					Coaches				Div 1 - 20 teams 2 divsions - Teams divded according to geography
+	2	Top Division			Top Division	-> Next phase				Quali League 4th place vs Div 1 second to least points														Div 2 - 32 teams  4 divisions - Teams divded according to geography
+	3	Top Division			1	CHAMPION Top Division next season				Quali League 5th place vs Div 1 second to most points					The winners in each match up go to Top Division
+	4	Top Division			2	Top Division next season																		Corruption - if Corruption is active, roll for teams
+	5	Top Division			3	Top Division next season				Losers in matchups will play Division 1 next season.					Losers in matchups will play Division 1 next season.
+	6	Top Division			4	Top Division next season
+	7	Quali League			5	Top Division next season
+	8	Quali League			6	Top Division next season				Qualfication games to Division 1
+	9	Quali League								Div 2 Nor/Eas Quali 2nd place vs Div 2 Sou/Wes Quali 3rd place
+	10	Quali League			Quali League	-> Next phase				Div 2 Sou/Wes Quali 2nd place vs Div 2 Nor/Eas Quali 3rd place
+					1	Top Division next season
+					2	Top Division next season				Winners in matchups will play in Division 1 next season
+	Div 1 North	-> Next phase			3	Qualication games
+	1	Quali League			4	Qualication games				Losers in matchups will play in Division 2 next season
+	2	Quali League			5	Qualication games
+	3	Div 1 North			6	Qualication games
+	4	Div 1 North			7	Div 1 Next season
+	5	Div 1 North			8	Div 1 Next season
+	6	Div 1 North
+	7	Div 1 North			Div 1 North	-> Next phase
+	8	Div 1 North			1	Qualication games
+	9	Div 1 North			2	Qualication games
+	10	Div 1 North			3	Div 1 Next season
+					4	Div 1 Next season
+	Div 1 South	-> Next phase			5	Div 1 Next season
+	1	Quali League			6	Div 1 Next season
+	2	Quali League			7	Div 2 next season
+	3	Div 1 South			8	Div 2 next season
+	4	Div 1 South
+	5	Div 1 South			Div 1 South	-> Next phase
+	6	Div 1 South			1	Qualication games
+	7	Div 1 South			2	Qualication games
+	8	Div 1 South			3	Div 1 Next season
+	9	Div 1 South			4	Div 1 Next season
+	10	Div 1 South			5	Div 1 Next season
+					6	Div 1 Next season
+	Div 2 North	-> Next phase			7	Div 2 next season
+	1	Div 2 North/East Quali			8	Div 2 next season
+	2	Div 2 North/East Quali
+	3	Div 2 North/East Quali			Div 2 Nor/Eas Quali	-> Next phase
+	4	Div 2 North/East Quali			1	Div 1 Next season
+	5	Div 2 North/East			2	Qualification game
+	6	Div 2 North/East			3	Qualification game
+	7	Div 2 North/East			4	Div 2 next season
+	8	Div 2 North/East			5	Div 2 next season
+					6	Div 2 next season
+	Div 2 East	-> Next phase			7	Div 2 next season
+	1	Div 2 North/East Quali			8	Div 2 next season
+	2	Div 2 North/East Quali
+	3	Div 2 North/East Quali			Div 2 Sou/Wes Quali	-> Next phase
+	4	Div 2 North/East Quali			1	Div 1 Next season
+	5	Div 2 North/East			2	Qualification game
+	6	Div 2 North/East			3	Qualification game
+	7	Div 2 North/East			4	Div 2 next season
+	8	Div 2 North/East			5	Div 2 next season
+					6	Div 2 next season
+	Div 2 West	-> Next phase			7	Div 2 next season
+	1	Div 2 South/West Quali			8	Div 2 next season
+	2	Div 2 South/West Quali
+	3	Div 2 South/West Quali			Div 2 North/East	-> Next phase
+	4	Div 2 South/West Quali			1	Div 2 next season
+	5	Div 2 South/West			2	Div 2 next season
+	6	Div 2 South/West			3	Div 2 next season
+	7	Div 2 South/West			4	Div 2 next season
+	8	Div 2 South/West			5	Div 2 next season
+					6	Div 2 next season
+	Div 2 South	-> Next phase			7	Relegation/possbiltiy to keep/change
+	1	Div 2 South/West Quali			8	Relegation/possbiltiy to keep/change
+	2	Div 2 South/West Quali
+	3	Div 2 South/West Quali			Div 2 South/West	-> Next phase
+	4	Div 2 South/West Quali			1	Div 2 next season
+	5	Div 2 South/West			2	Div 2 next season
+	6	Div 2 South/West			3	Div 2 next season
+	7	Div 2 South/West			4	Div 2 next season
+	8	Div 2 South/West			5	Div 2 next season
+					6	Div 2 next season
+					7	Relegation/possbiltiy to keep/change
+					8	Relegation/possbiltiy to keep/change
+
+
+
+
+
+
+
+
+	CUP PHASE ONE					CUP PHASE TWO				CUP PHASE THREE			CUP PHASE FOUR			CUP PHASE FIVE		CUP PHASE SIX
+						 
+	Total 62 teams in the league					Total 32 teams remain				Total 16 teams remain			8 teams remain			4 teams reamain		2 teams remain
+	22 teams don't play the first round, last seasons 22 highest rank					Divided into 8 groups with 4 teams				8 winners of groups play 8 2nd place			Winners from last phase play			Winners from last phase play		Winners from last phase play
+	40 teams play one game against each other					Last season top 8 go into 8 different groups				Teams from the same group in P2			Teams from the same group in P2			Teams from the same group in P2		One final game on neutral pitch
+	Div 1 teams can't play each other					Each team play each other once				Can't play each other until final			Can't play each other until final			Can't play each other until final
+
+	10 top division - pass automatically to next phase					Group A
+	12 best Div 1 teams - pass automatically to next phase					1	Next phase
+						2	Next phase
+	8 Div 1 teams plays against 8 Div 2 teams					3	Eliminated
+	12 div 2 plays against 12 Div 2 teams randomly					4	Eliminated
+
+						Group B
+						1	Next phase
+						2	Next phase
+						3	Eliminated
+						4	Eliminated
+
+						Group C
+						1	Next phase
+						2	Next phase
+						3	Eliminated
+						4	Eliminated
+
+						Group D
+						1	Next phase
+						2	Next phase
+						3	Eliminated
+						4	Eliminated
+
+						Group E
+						1	Next phase
+						2	Next phase
+						3	Eliminated
+						4	Eliminated
+
+						Group F
+						1	Next phase
+						2	Next phase
+						3	Eliminated
+						4	Eliminated
+
+						Group H
+						1	Next phase
+						2	Next phase
+						3	Eliminated
+						4	Eliminated
+
+						Group I
+						1	Next phase
+						2	Next phase
+						3	Eliminated
+						4	Eliminated

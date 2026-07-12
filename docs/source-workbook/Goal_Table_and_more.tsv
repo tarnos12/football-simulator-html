@@ -1,0 +1,74 @@
+
+
+	Goal roll and all the exact calculations and the goal table won't be able to access for the player.
+	All table should be able to access for me as a creator, if tweaks and balancing needs to be done.
+
+	GOAL TABLE
+				Simulate roll 2D6
+		2	3	4	5	6	7	8	9	10	11	12	13	14	15	16
+Team Difference	12 and higher	0	1	1	1	2	2	3	3	4	4	5	5	6	6	7
+	11	0	0	1	1	1	2	2	3	3	4	4	5	5	6	6
+	10	0	0	1	1	1	2	2	3	3	4	4	5	5	6	6
+	9	0	0	0	1	1	1	2	2	3	3	4	4	5	5	6	 
+	8	0	0	0	1	1	1	2	2	3	3	4	4	5	5	6
+	7	0	0	0	0	1	1	1	2	2	3	3	4	4	5	5
+	6	0	0	0	0	1	1	1	2	2	3	3	4	4	5	5	Example - if one team is 5 stronger in attack compared to the opposite teams defence, roll 2d6 the minimum needed to score is 6. 
+	5	0	0	0	0	1	1	1	2	2	3	3	4	4	5	5	i.e. a roll of 9 results in 2 goals scored.
+	4	0	0	0	0	0	1	1	1	2	2	3	3	4	4	5
+	3	0	0	0	0	0	1	1	1	2	2	3	3	4	4	5
+	2	0	0	0	0	0	1	1	1	2	2	3	3	4	4	5
+	1	0	0	0	0	0	0	1	1	1	2	2	3	3	4	4
+	0	0	0	0	0	0	0	1	1	1	2	2	3	3	4	4
+	-1	0	0	0	0	0	0	1	1	1	2	2	3	3	4	4
+	-2	0	0	0	0	0	0	0	1	1	1	2	2	3	3	4
+	-3	0	0	0	0	0	0	0	1	1	1	2	2	3	3	4
+	-4	0	0	0	0	0	0	0	1	1	1	2	2	3	3	4
+	-5	0	0	0	0	0	0	0	0	1	1	1	2	2	3	3
+	-6	0	0	0	0	0	0	0	0	1	1	1	2	2	3	3
+	-7	0	0	0	0	0	0	0	0	1	1	1	2	2	3	3
+	-8	0	0	0	0	0	0	0	0	0	1	1	1	2	2	3
+	-9	0	0	0	0	0	0	0	0	0	1	1	1	2	2	3
+	-10	0	0	0	0	0	0	0	0	0	0	1	1	1	2	2
+	-11	0	0	0	0	0	0	0	0	0	0	1	1	1	2	2
+	-12 and lower	0	0	0	0	0	0	0	0	0	0	0	1	1	1	2
+
+
+		Organisation
+	Violent Crowd	9	8	7	6	5	4	3	2	1
+	Club size 9	0	0	0	0.01	0.01	0.03	0.03	0.03	0.05
+	8	0	0	0	0	0.01	0.01	0.03	0.03	0.03
+	7	0	0	0	0	0	0.01	0.01	0.03	0.03
+	6	0	0	0	0	0	0	0.01	0.01	0.03
+	5	0	0	0	0	0	0	0	0.01	0.01
+	4	0	0	0	0	0	0	0	0	0.01
+	3	0	0	0	0	0	0	0	0	0
+	2	0	0	0	0	0	0	0	0	0
+	1	0	0	0	0	0	0	0	0	0
+
+For example, if Violent crowd is activated at league creation, a team with Club size 8 and Organisation 2, has a 3% risk of every game of having an incident and then a XX% chance of losing 0-3 because of riots/incidents (maybe have a list of colourful reasons)
+Instead of automatically awarding one team victory if violent crowd is triggered,  it should be a chance of awarding the win. There will still be a notation that something happened, but I fear it would happen to often otherwise.
+If both teams roll and activate violent crowd, both teams role for a risk of losing by 0-3, if both teams roll to lose, then that is what happens.
+If an incident took place, there will be a marker in the results page, and when you hover over it, a reason from the list below is chosen.
+
+The list should be able to be accessed for me in an easy way to add and remove reasons
+List of reasons violent crowd/abandoned games
+Violence between crowds in the stands
+Crowd invaded the pitch
+Crowd threw pigshead on the pitch
+Crowd threw moped on the pitch
+Police intervened in the stands
+Fire in the stands
+Game called off due to unsafe environment
+Players going into the stand to fight
+Barricades in the stands failing between crowds
+Bangers thrown on the pitch
+Crowd destroying the stands
+Stand off between police and the crowd
+Activists invaded and handcuffed themselves to a goalpost
+Crowd threw in smokebombs
+Crowd being rascist
+Fighting between players on the pitch
+Club owner attacks officials
+Bomb scare
+Streaker
+Power outage

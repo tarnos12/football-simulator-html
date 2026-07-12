@@ -1,0 +1,40 @@
+
+	Statistics
+	Both for ingame, but also a way to follow up and change numbers for balance issues.
+
+	Ingame statistic - available from a league screen, and you should also be able check individual teams history from  the team page.
+		All time table for top divison (maybe one for each division)
+		Team with the most championship
+		Every old table saved to view for all divisions - so you can go back and see who won season 10 for example
+		Team that has been relegated the most times
+		The team that finished the highest as a new team for the season
+		Highest winning points for league winner
+		Lowest winning points for league winner
+		Biggest winning league margin
+		Smallest winning league margin
+		Team that scored the most in a season/ever
+		Team that scored the least in a season/ever
+		Highest points that still got relegated
+		Team with the fewest points in a season
+		Longest match winning streak
+		Longest undefeated streak
+		Longest number of losses in a row
+		Longest number of games without a win in a row
+		Team that scored the most goals in a single game
+		Biggest winning score / Biggest losing score
+
+		Highest scoring draw
+		Highest scoring match
+		Average point needed to be champion
+		Average point needed not to be relegated
+		Best/worst goal difference
+
+		Head-to-Head statistic between teams
+
+		Same as above but for the Cup - if a cup exist
+
+
+	Game stats for devs - this might be useless since users can change rules and stats at whim
+		Stats for game result - in order to see the most common result
+		Stats for most common difference between teams, after all bonus have been added.
+		Stats for how many leagues and teams has been created

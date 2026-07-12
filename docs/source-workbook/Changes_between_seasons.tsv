@@ -1,0 +1,173 @@
+Almost all the tables below shouldn't be available for the player.
+But all tables should be able to access for me as a creator, if tweaks and balancing needs to be done.
+
+Club Size changes
+You set the which table to use in the rules section.
+Options are: 1. No change/Static club sizes stay the same. 2. You set the frequency of check for changes for example once every 5 years. 3. You decicde which of the columns to use Slow or normal
+
+		S	N
+	2	0.05	0.1
+	1	0.1	0.2
+	0	0.7	0.4
+	-1	0.1	0.2
+	-2	0.05	0.1
+
+Club organisation change
+				-3	-2	-1	0	1	2	3
+	Capitalistic			0.05	0.15	0.2	0.2	0.2	0.15	0.05
+	51% Fans			0.01	0.09	0.2	0.4	0.2	0.09	0.01
+
+
+Team Stat changes rules settings
+
+		Normal			Use the tables below
+		Slow			Use the tables below, but half any change and round up.
+		On Hold/Static			No changes between seasons
+		Draft mode			A future american sport setting, the teams that finnish in the bottom of their sport, has a higher change of improving their stat between seasons.
+
+
+Team Stat changes - Attack, Defence and Stamina - different change rate for Capitalistic and 51% fans teams.
+One roll for each team stat, so for example, for one team the result could be, Attack increase by 1, Defence decrease by 2 and Stamina stays the same.
+
+Capitalistic		Change
+		-3	-2	-1	0	1	2	3	Normal
+		-2	-1	-1	0	1	1	2	Slow
+Club Org.	9	0	0.1	0.15	0.25	0.25	0.2	0.05
+	8	0	0.1	0.15	0.25	0.25	0.2	0.05
+	7	0	0.1	0.2	0.25	0.25	0.15	0.05
+	6	0	0.1	0.2	0.25	0.25	0.15	0.05
+	5	0	0.1	0.25	0.3	0.25	0.1	0
+	4	0.05	0.15	0.25	0.25	0.2	0.1	0
+	3	0.05	0.15	0.25	0.25	0.2	0.1	0
+	2	0.05	0.2	0.25	0.25	0.15	0.1	0
+	1	0.05	0.2	0.25	0.25	0.15	0.1	0
+
+
+51% Fans		Change
+		-3	-2	-1	0	1	2	3	Normal
+		-2	-1	-1	0	1	1	2	Slow
+Club Org.	9	0	0.1	0.15	0.3	0.25	0.15	0.05
+	8	0	0.1	0.15	0.35	0.2	0.15	0.05
+	7	0	0.1	0.2	0.35	0.2	0.15	0
+	6	0	0.1	0.2	0.4	0.2	0.1	0
+	5	0	0.1	0.2	0.4	0.2	0.1	0
+	4	0	0.1	0.2	0.4	0.2	0.1	0
+	3	0	0.15	0.2	0.35	0.2	0.1	0
+	2	0.05	0.15	0.2	0.35	0.15	0.1	0
+	1	0.05	0.15	0.25	0.3	0.15	0.1	0
+
+Club Ownership
+
+		Change of Club Ownership type - Capitalistic or 51%,
+		Only if league rules allows ownership change. Player choose frequency.
+
+				Standard		Frequent
+			Yes	0.01		0.05
+			No	0.99		0.95
+
+		Once a club change owership type, it can't change for the next X seasons. Player can always manually change at any point
+
+
+Coach changes
+
+		Coach changes
+		Between seasons					Chance of change						Any year after that
+							Year 1	Y2	Y3	Y4	Y5	Y6	Same percentage
+		No relegation/No champion					0.1	0.2	0.4	0.6	0.7	0.8	as Y6.
+		Champion/Promoted					0.05	0.15	0.4	0.5	0.6	0.7
+		Relegated					0.9	0.9	0.9	0.9	0.9	0.9
+
+		If a coach changes a new one is randomly generated.
+		With random skill and random attributes - see table for new coach generation
+
+
+New coach generation - whenever a new coach is generated for a club
+
+		Coach skill						Coach Attributes
+		1	2	3	4	5
+Club Size	9	0.05	0.15	0.35	0.3	0.15		1 Attribute		0.3	Assign one negative or one positive attribute at random
+	8	0.05	0.2	0.35	0.3	0.1		2 Attributes		0.6	80% chance to Assign one negative AND one positive attribute at random. 10%/10% chance to assign either 2 good, or 2 bad traits.
+	7	0.05	0.2	0.35	0.3	0.1		3 Attributes		0.1	Assign three attributes at random, however can not be three positive or three negative. Must be a mix of positve and negative
+	6	0.05	0.2	0.4	0.25	0.1
+	5	0.05	0.25	0.4	0.25	0.05
+	4	0.1	0.25	0.4	0.2	0.05
+	3	0.1	0.3	0.35	0.2	0.05
+	2	0.1	0.3	0.35	0.2	0.05
+	1	0.15	0.3	0.35	0.15	0.05
+
+
+FORM - changes after every match - this should also be editable for balance issues.
+Max plus 2, Minimum -2
+
+	Nor.	CP	CN
+-0,06- -0,1	0.15	0.1	0.2
+-0,01 -0,05	0.2	0.15	0.25
+No change	0.3	0.3	0.3
+0,01 - 0,05	0.2	0.25	0.15
+0,06 -,0,1	0.15	0.2	0.1
+
+
+
+
+
+
+		Amount of games and percentages, will be modified, might be too complicated to put in the game, maybe something for the future
+		Change of coach during the season.
+		Coach can't change before the halfmark of a season, after that these criteria sets in.
+
+		5 losses in a row starts the chance of firing
+		5 losses 10% chance middle of season coach change
+		6 losses 20% chance
+		7 losses 40%
+		8 losses 60%
+		9 losses 80%
+		10 losses 90%
+		Any win in between losses takes the chance down 2 steps. For example 8 losses in a row, wins, then the next game only counts as the coach has 6 losses in a row.
+
+		8 games in a row without a win starts the chance of firing
+		8 games 5%
+		9 games 15%
+		10 games 30%
+		11 games 50%
+		12 games 70%
+		13 games 90%
+		Any win in between losses takes the chance down 3 steps. For example 11 games in a row without a win, the team wins, then the next game only counts as the coach has 8 games in a row without win.
+
+		If a number of wins for these teams bring them below the threshold, then the coach has saved themselves from being fired, and it resets.
+
+
+Corruption
+If the player activate corruption for a whole league or a division
+The player then sets the level of frequency for corruption to occur, low, medium or high, again either on league level or division. So in the same league different divisions can have diffferente frequency of corruption.
+The player then also set the intervall for amounts of points being deducted beginning of the season.
+
+Team caught in corruption
+		Yes	No
+	L	0.01	0.99
+	M	0.05	0.95
+	H	0.15	0.85
+
+		Min	Max
+Interval Span		-3	-12
+
+Span of points deductable could be for instance -3 to -12, then any team caught in corruption would start the following season with a random number of minus points in that span.
+A random reason will then be picked from the list of corruption, and there will be a marker in the division table on the team that was caught, during the whole season.
+If you hover over the marker, the reason for the corruption, and how many points are reduced for the team, is shown.
+
+The list should be able to be accessed for me in an easy way to add and remove reasons
+List of reason of corruption
+Match-fixing
+False accounting
+Insolvency and Administration
+Wage delays
+Bribing referees
+Bribing official clerks
+Third-party ownership
+Fielding ineligible players
+Bringing the game in disrespute
+Tax evasion
+Not paying transfer fees
+Falsified player information
+Spied on competitors
+Hacked competitors
+Bought players that were too young
