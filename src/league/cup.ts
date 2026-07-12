@@ -13,6 +13,7 @@ import { resolveDecider } from "../sim/decider";
 import { computeTable, orderTable } from "./standings";
 import { generateSchedule } from "./schedule";
 import type { ScheduledMatch } from "../model/types";
+import { goalTableOf } from "../model/config-resolve";
 
 export interface CupTie {
   homeId: string;
@@ -88,7 +89,7 @@ export function playGroupStage(league: LeagueSystem, state: CupState, cfg: CupCo
   for (const group of state.groups) {
     for (const m of group.schedule) {
       if (m.result) continue;
-      const ctx: MatchContext = { rules, weather: "sunny" };
+      const ctx: MatchContext = { rules, weather: "sunny", goalTable: goalTableOf(league) };
       const rng = new RNG(`${league.seed}::cup::s${season}::${group.name}::${m.homeId}-${m.awayId}`);
       m.result = resolveMatch(league.teams[m.homeId], league.teams[m.awayId], ctx, rng);
     }
@@ -116,7 +117,7 @@ export function playNextCupRound(league: LeagueSystem, state: CupState, cfg: Cup
   for (const tie of round.ties) {
     if (tie.winnerId) continue;
     const neutral = isFinal && cfg.finalNeutralGround;
-    const ctx: MatchContext = { rules, weather: "sunny", neutralGround: neutral };
+    const ctx: MatchContext = { rules, weather: "sunny", neutralGround: neutral, goalTable: goalTableOf(league) };
     const seed = `${league.seed}::cup::s${season}::${round.name}::${tie.homeId}-${tie.awayId}`;
     const rng = new RNG(seed);
     const home = league.teams[tie.homeId];

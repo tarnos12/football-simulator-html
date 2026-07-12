@@ -11,6 +11,7 @@ import { RNG } from "../core/rng";
 import { CORRUPTION } from "../config";
 import type { LeagueRules } from "../config";
 import type { LeagueSystem } from "../model/types";
+import { corruptionReasons } from "../model/config-resolve";
 
 export interface CorruptionMarker {
   divisionId: string;
@@ -32,6 +33,7 @@ function divisionRules(league: LeagueSystem, override?: Partial<LeagueRules>): L
 export function computeCorruption(league: LeagueSystem, season: number, rng: RNG): CorruptionResult {
   const startingPoints: Record<string, Record<string, number>> = {};
   const markers: CorruptionMarker[] = [];
+  const reasons = corruptionReasons(league);
 
   for (const level of league.levels) {
     for (const div of level.divisions) {
@@ -50,7 +52,7 @@ export function computeCorruption(league: LeagueSystem, season: number, rng: RNG
         void rng;
         if (!teamRng.chance(rate)) continue;
         const pointsLost = teamRng.int(span.min, span.max); // both negative; min ≤ max
-        const reason = teamRng.pick(CORRUPTION.reasons);
+        const reason = teamRng.pick(reasons);
         (startingPoints[div.id] ??= {})[teamId] = pointsLost;
         markers.push({ divisionId: div.id, teamId, reason, pointsLost });
       }

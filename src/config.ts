@@ -54,13 +54,22 @@ export const GOAL_TABLE: readonly (readonly number[])[] = [
   /* −12 */ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2],
 ];
 
-/** Look up goals scored for an effective difference and a (possibly >12) roll. */
-export function goalTableLookup(diff: number, roll: number): number {
+/** Look up goals in a specific (possibly creator-edited) goal table. */
+export function goalTableLookupWith(
+  table: readonly (readonly number[])[],
+  diff: number,
+  roll: number,
+): number {
   const clampedDiff = Math.max(-12, Math.min(12, diff));
   const rowIndex = 12 - clampedDiff; // diff +12 → row 0, diff −12 → row 24
   const clampedRoll = Math.max(2, Math.min(16, roll));
   const colIndex = clampedRoll - 2;
-  return GOAL_TABLE[rowIndex][colIndex];
+  return table[rowIndex][colIndex];
+}
+
+/** Look up goals scored for an effective difference and a (possibly >12) roll. */
+export function goalTableLookup(diff: number, roll: number): number {
+  return goalTableLookupWith(GOAL_TABLE, diff, roll);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

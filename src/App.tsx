@@ -6,13 +6,14 @@ import { StandingsTable } from "./ui/StandingsTable";
 import { ResultsView } from "./ui/ResultsView";
 import { CupView } from "./ui/CupView";
 import { LocationMap } from "./ui/LocationMap";
+import { EditDivision } from "./ui/EditDivision";
 import { StatsView } from "./ui/StatsView";
 import { CreatorTools } from "./ui/CreatorTools";
 import { SeasonSummary } from "./ui/SeasonSummary";
 import { TeamCardModal } from "./ui/TeamCardModal";
 import { ShareBar } from "./ui/ShareBar";
 
-type Tab = "table" | "results" | "map" | "cup" | "summary" | "stats" | "creator";
+type Tab = "table" | "results" | "map" | "cup" | "summary" | "stats" | "edit" | "creator";
 
 export function App() {
   const { campaign, start, act, reset } = useCampaign();
@@ -41,6 +42,7 @@ export function App() {
     { id: "cup", label: "Cup", show: !!campaign.cup },
     { id: "summary", label: "Summary", show: complete },
     { id: "stats", label: "History", show: true },
+    { id: "edit", label: "Edit teams", show: true },
     { id: "creator", label: "Creator tools", show: true },
   ];
   const activeTab = tabs.find((t) => t.id === tab && t.show) ? tab : "table";
@@ -54,7 +56,8 @@ export function App() {
             <span className="muted">{campaign.league.name}</span>
           </div>
           <div className="row">
-            <button className="btn sm" data-testid="sim-round" disabled={complete} onClick={() => act((c) => c.simulateNextRound())}>▶ Sim round</button>
+            <button className="btn sm" data-testid="sim-match" disabled={complete} onClick={() => act((c) => c.simulateNextMatch(divisionId))}>▶ Sim match</button>
+            <button className="btn sm" data-testid="sim-round" disabled={complete} onClick={() => act((c) => c.simulateNextRound())}>▶▶ Sim round</button>
             <button className="btn sm primary" data-testid="sim-season" disabled={complete} onClick={() => act((c) => c.simulateSeason())}>⏭ Sim whole season</button>
             <button className="btn sm good" data-testid="next-season" disabled={!complete} onClick={() => { act((c) => c.advanceToNextSeason()); setTab("table"); }}>Next season ▸</button>
           </div>
@@ -84,6 +87,7 @@ export function App() {
       {activeTab === "cup" && <CupView campaign={campaign} act={act} />}
       {activeTab === "summary" && <SeasonSummary campaign={campaign} />}
       {activeTab === "stats" && <StatsView history={campaign.history} teams={campaign.league.teams} />}
+      {activeTab === "edit" && <EditDivision campaign={campaign} divisionId={divisionId} setDivisionId={setDivisionId} onChange={() => act(() => {})} />}
       {activeTab === "creator" && <CreatorTools campaign={campaign} act={act} />}
 
       {teamModal && (

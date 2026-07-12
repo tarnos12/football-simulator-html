@@ -17,6 +17,7 @@ export interface DivisionArchive {
   finalTable: TableRow[];
   results: MatchResult[];
   championId?: string;
+  relegated: string[];
 }
 export interface SeasonArchive {
   seasonNumber: number;
@@ -30,14 +31,18 @@ export function archiveSeason(league: LeagueSystem, season: SeasonState): Season
   const levelIndexOf = new Map<string, number>();
   league.levels.forEach((l, i) => l.divisions.forEach((d) => levelIndexOf.set(d.id, i)));
 
-  const divisions: DivisionArchive[] = season.divisions.map((ds) => ({
-    divisionId: ds.divisionId,
-    name: ds.name,
-    levelIndex: levelIndexOf.get(ds.divisionId) ?? 0,
-    finalTable: ds.table.map((r) => ({ ...r, positionHistory: [...r.positionHistory] })),
-    results: ds.schedule.filter((m) => m.result).map((m) => m.result as MatchResult),
-    championId: summary.divisions.find((d) => d.divisionId === ds.divisionId)?.championId,
-  }));
+  const divisions: DivisionArchive[] = season.divisions.map((ds) => {
+    const divSummary = summary.divisions.find((d) => d.divisionId === ds.divisionId);
+    return {
+      divisionId: ds.divisionId,
+      name: ds.name,
+      levelIndex: levelIndexOf.get(ds.divisionId) ?? 0,
+      finalTable: ds.table.map((r) => ({ ...r, positionHistory: [...r.positionHistory] })),
+      results: ds.schedule.filter((m) => m.result).map((m) => m.result as MatchResult),
+      championId: divSummary?.championId,
+      relegated: divSummary?.relegated ?? [],
+    };
+  });
 
   return { seasonNumber: season.seasonNumber, divisions, overallChampionId: summary.overallChampionId };
 }
@@ -153,6 +158,104 @@ export function longestStreaks(archives: readonly SeasonArchive[]): Record<Strea
     }
   }
   return best;
+}
+
+export interface LeagueRecord {
+  label: string;
+  value: string;
+  teamId?: string;
+  seasonNumber?: number;
+}
+
+/** The §20 record set derived from all archives (top-division focus for titles). */
+export function leagueRecords(archives: readonly SeasonArchive[]): LeagueRecord[] {
+  const recs: LeagueRecord[] = [];
+  if (archives.length === 0) return recs;
+  const topDivs = archives.flatMap((a) => a.divisions.filter((d) => d.levelIndex === 0).map((d) => ({ a, d })));
+  const allDivs = archives.flatMap((a) => a.divisions.map((d) => ({ a, d })));
+
+  // Champion points extremes + averages (top division).
+  const champs = topDivs
+    .map(({ a, d }) => ({ a, d, row: d.finalTable[0] }))
+    .filter((x) => x.row);
+  if (champs.length) {
+    const byPts = [...champs].sort((x, y) => y.row.points - x.row.points);
+    push(recs, "Highest winning points", `${byPts[0].row.points}`, byPts[0].row.teamId, byPts[0].a.seasonNumber);
+    const low = byPts[byPts.length - 1];
+    push(recs, "Lowest winning points", `${low.row.points}`, low.row.teamId, low.a.seasonNumber);
+    push(recs, "Avg points to be champion", avg(champs.map((c) => c.row.points)).toFixed(1));
+
+    // Winning margin = champion − runner-up.
+    const margins = champs
+      .filter((c) => c.d.finalTable[1])
+      .map((c) => ({ c, m: c.row.points - c.d.finalTable[1].points }));
+    if (margins.length) {
+      const bySize = [...margins].sort((x, y) => y.m - x.m);
+      push(recs, "Biggest title margin", `${bySize[0].m} pts`, bySize[0].c.row.teamId, bySize[0].c.a.seasonNumber);
+      const small = bySize[bySize.length - 1];
+      push(recs, "Smallest title margin", `${small.m} pts`, small.c.row.teamId, small.c.a.seasonNumber);
+    }
+  }
+
+  // Points to avoid relegation (lowest safe team, top division).
+  const safePts = topDivs
+    .map(({ a, d }) => {
+      const idx = d.finalTable.length - d.relegated.length - 1;
+      return idx >= 0 ? { a, row: d.finalTable[idx] } : null;
+    })
+    .filter((x): x is { a: SeasonArchive; row: TableRow } => !!x);
+  if (safePts.length) push(recs, "Avg points to stay up", avg(safePts.map((s) => s.row.points)).toFixed(1));
+
+  // Highest points that still got relegated (across all divisions).
+  const relRows = allDivs.flatMap(({ a, d }) => d.relegated.map((id) => ({ a, row: d.finalTable.find((r) => r.teamId === id)! })).filter((x) => x.row));
+  if (relRows.length) {
+    const top = [...relRows].sort((x, y) => y.row.points - x.row.points)[0];
+    push(recs, "Most points, still relegated", `${top.row.points}`, top.row.teamId, top.a.seasonNumber);
+  }
+
+  // Goals & GD extremes (all divisions).
+  const rows = allDivs.flatMap(({ a, d }) => d.finalTable.map((row) => ({ a, row })));
+  extremum(recs, rows, "Most goals in a season", (r) => r.row.goalsFor, true);
+  extremum(recs, rows, "Fewest goals in a season", (r) => r.row.goalsFor, false);
+  extremum(recs, rows, "Best goal difference", (r) => r.row.goalsFor - r.row.goalsAgainst, true, true);
+  extremum(recs, rows, "Worst goal difference", (r) => r.row.goalsFor - r.row.goalsAgainst, false, true);
+  extremum(recs, rows, "Fewest points in a season", (r) => r.row.points, false);
+
+  // Highest-scoring draw (all matches).
+  let hiDraw: { total: number; s: string; season: number } | null = null;
+  for (const { a, d } of allDivs) {
+    for (const m of d.results) {
+      if (m.homeGoals === m.awayGoals) {
+        const total = m.homeGoals + m.awayGoals;
+        if (!hiDraw || total > hiDraw.total) hiDraw = { total, s: `${m.homeGoals}–${m.awayGoals}`, season: a.seasonNumber };
+      }
+    }
+  }
+  if (hiDraw) push(recs, "Highest-scoring draw", hiDraw.s, undefined, hiDraw.season);
+
+  return recs;
+}
+
+function extremum(
+  recs: LeagueRecord[],
+  rows: { a: SeasonArchive; row: TableRow }[],
+  label: string,
+  metric: (r: { a: SeasonArchive; row: TableRow }) => number,
+  max: boolean,
+  signed = false,
+): void {
+  if (!rows.length) return;
+  const sorted = [...rows].sort((x, y) => (max ? metric(y) - metric(x) : metric(x) - metric(y)));
+  const best = sorted[0];
+  const v = metric(best);
+  push(recs, label, signed && v > 0 ? `+${v}` : `${v}`, best.row.teamId, best.a.seasonNumber);
+}
+
+function push(recs: LeagueRecord[], label: string, value: string, teamId?: string, seasonNumber?: number): void {
+  recs.push({ label, value, teamId, seasonNumber });
+}
+function avg(xs: number[]): number {
+  return xs.reduce((a, b) => a + b, 0) / xs.length;
 }
 
 /** Head-to-head across all archives between two teams. */

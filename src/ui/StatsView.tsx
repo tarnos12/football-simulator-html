@@ -15,6 +15,7 @@ import {
   extremeResults,
   longestStreaks,
   headToHead,
+  leagueRecords,
 } from "../stats/records";
 
 export function StatsView({
@@ -171,8 +172,69 @@ export function StatsView({
         </div>
       </div>
 
+      {/* ── League records (§20) ── */}
+      <div className="panel">
+        <h2>League records</h2>
+        <div className="statgrid">
+          {leagueRecords(history).map((r, i) => (
+            <div className="stat" key={i}>
+              <div className="k">{r.label}</div>
+              <div className="v">{r.value}</div>
+              <div className="muted">
+                {r.teamId ? nameOf(r.teamId) : ""}{r.seasonNumber ? ` · Season ${r.seasonNumber}` : ""}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <PastSeasons history={history} nameOf={nameOf} />
       <HeadToHeadPanel history={history} teams={teams} nameOf={nameOf} />
     </>
+  );
+}
+
+// ── Browse past seasons' final tables (§20: "who won season 10") ──
+function PastSeasons({ history, nameOf }: { history: SeasonArchive[]; nameOf: (id: string) => string }) {
+  const [season, setSeason] = useState<number>(history[history.length - 1]?.seasonNumber ?? 1);
+  const arch = history.find((h) => h.seasonNumber === season) ?? history[history.length - 1];
+  const [divId, setDivId] = useState<string>(arch?.divisions[0]?.divisionId ?? "");
+  const div = arch?.divisions.find((d) => d.divisionId === divId) ?? arch?.divisions[0];
+
+  if (!arch || !div) return null;
+
+  return (
+    <div className="panel">
+      <div className="row" style={{ justifyContent: "space-between" }}>
+        <h2 style={{ margin: 0 }}>Past seasons</h2>
+        <div className="row">
+          <select value={season} onChange={(e) => setSeason(+e.target.value)}>
+            {history.map((h) => <option key={h.seasonNumber} value={h.seasonNumber}>Season {h.seasonNumber}</option>)}
+          </select>
+          <select value={div.divisionId} onChange={(e) => setDivId(e.target.value)}>
+            {arch.divisions.map((d) => <option key={d.divisionId} value={d.divisionId}>{d.name}</option>)}
+          </select>
+        </div>
+      </div>
+      <div className="table-wrap">
+        <table className="grid">
+          <thead><tr><th className="num">#</th><th>Team</th><th className="num">Pl</th><th>W-D-L</th><th className="num">GF</th><th className="num">GA</th><th className="num">Pts</th></tr></thead>
+          <tbody>
+            {div.finalTable.map((r, i) => (
+              <tr key={r.teamId}>
+                <td className="num pos">{i + 1}</td>
+                <td>{nameOf(r.teamId)}{div.championId === r.teamId ? " 🏆" : ""}</td>
+                <td className="num">{r.played}</td>
+                <td>{r.won}-{r.drawn}-{r.lost}</td>
+                <td className="num">{r.goalsFor}</td>
+                <td className="num">{r.goalsAgainst}</td>
+                <td className="num pts">{r.points}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 

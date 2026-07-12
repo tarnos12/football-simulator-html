@@ -11,6 +11,7 @@ import { RNG } from "../core/rng";
 import { resolveMatch, type MatchContext } from "../sim/match";
 import type { LeagueRules } from "../config";
 import type { Division, LeagueSystem, ScheduledMatch } from "../model/types";
+import { goalTableOf } from "../model/config-resolve";
 import { computeTable, orderTable } from "./standings";
 import { generateSchedule, roundCount } from "./schedule";
 import type { DivisionSeason, SeasonState } from "./types";
@@ -95,7 +96,7 @@ export function simulateMatch(
   const rules = divisionRules(league, leagueDivision);
   const home = league.teams[match.homeId];
   const away = league.teams[match.awayId];
-  const base: MatchContext = { rules, weather: "sunny" };
+  const base: MatchContext = { rules, weather: "sunny", goalTable: goalTableOf(league) };
   const extra = hooks?.context?.(match.homeId, match.awayId, div, season, league) ?? {};
   const ctx: MatchContext = { ...base, ...extra, rules };
   const seed = matchSeed(league, season.seasonNumber, div.divisionId, match);
@@ -105,8 +106,8 @@ export function simulateMatch(
   hooks?.afterMatch?.(match.result, div, season, league, new RNG(seed + "::post"));
 }
 
-/** Recompute and re-order a division's table; record positions when a round closes. */
-function refreshTable(league: LeagueSystem, div: DivisionSeason): void {
+/** Recompute and re-order a division's table (no position-history push). */
+export function refreshDivisionTable(league: LeagueSystem, div: DivisionSeason): void {
   const leagueDivision = league.levels
     .flatMap((l) => l.divisions)
     .find((d) => d.id === div.divisionId)!;
@@ -135,7 +136,7 @@ export function simulateDivisionRound(
   const roundMatches = div.schedule.filter((m) => m.round === nextRound);
   for (const m of roundMatches) simulateMatch(league, season, div, m, hooks);
   div.playedRounds = nextRound;
-  refreshTable(league, div);
+  refreshDivisionTable(league, div);
   // Record each team's position after this completed round.
   div.table.forEach((row, i) => row.positionHistory.push(i + 1));
   return roundMatches;

@@ -3,6 +3,7 @@ import type { Campaign } from "../game/campaign";
 import { COACH_ATTRIBUTES } from "../config";
 import type { CoachAttributeId } from "../config";
 import { JerseyPreview } from "./Jersey";
+import { JerseyEditor } from "./JerseyEditor";
 import { formArrows, changeArrow } from "./format";
 
 /**
@@ -83,6 +84,35 @@ export function TeamCardModal({ campaign, teamId, onClose, onChange }: {
             return <span key={id} className="chip marker" title={`${a.effect} — ${a.hover}`} style={{ color: a.positive ? "var(--accent)" : "var(--danger)" }}>{a.name}</span>;
           })}
         </div>
+
+        {edit && (
+          <>
+            <h3>Coach attributes <span className="muted" style={{ fontSize: "0.8rem" }}>(toggle to hand-edit)</span></h3>
+            <div className="grid2">
+              {COACH_ATTRIBUTES.map((a) => {
+                const on = team.coach.attributes.includes(a.id);
+                return (
+                  <label className="check" key={a.id} title={a.hover} style={{ color: a.positive ? "var(--accent)" : "var(--danger)" }}>
+                    <input
+                      type="checkbox"
+                      checked={on}
+                      onChange={(e) => {
+                        const attrs = e.target.checked
+                          ? [...team.coach.attributes, a.id]
+                          : team.coach.attributes.filter((x) => x !== a.id);
+                        team.coach.attributes = attrs;
+                        onChange();
+                      }}
+                    />
+                    {a.name} <span className="muted" style={{ fontSize: "0.75rem" }}>({a.effect})</span>
+                  </label>
+                );
+              })}
+            </div>
+            <h3>Jersey</h3>
+            <JerseyEditor jersey={team.jersey} onChange={(j) => { campaign.league.teams[teamId].jersey = j; onChange(); }} />
+          </>
+        )}
 
         <div className="row" style={{ marginTop: "1rem" }}>
           <button className="btn" onClick={() => setEdit(!edit)}>{edit ? "Done editing" : "✎ Edit team"}</button>

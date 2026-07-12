@@ -11,8 +11,10 @@ import { RNG } from "../core/rng";
 import type { CupConfig, LeagueSystem } from "../model/types";
 import {
   createSeason,
+  simulateMatch,
   simulateSystemRound,
   simulateWholeSeason,
+  refreshDivisionTable,
   isSeasonComplete,
   applyPromotionRelegation,
   seasonSummary,
@@ -55,6 +57,27 @@ export class Campaign {
 
   simulateNextRound(): void {
     if (!isSeasonComplete(this.season)) simulateSystemRound(this.league, this.season, this.hooks);
+  }
+
+  /** Simulate a single next match (§4): the next unplayed game of a division. */
+  simulateNextMatch(divisionId?: string): void {
+    const div = divisionId
+      ? this.season.divisions.find((d) => d.divisionId === divisionId)
+      : this.season.divisions.find((d) => d.playedRounds < d.totalRounds);
+    if (!div) return;
+    const next = div.schedule.find((m) => !m.result);
+    if (!next) return;
+    simulateMatch(this.league, this.season, div, next, this.hooks);
+    refreshDivisionTable(this.league, div);
+    // If this completed the division's current round, advance the round counter
+    // and record position history so the round-based views stay consistent.
+    const nextRound = div.playedRounds + 1;
+    const roundDone = div.schedule.filter((m) => m.round === nextRound).every((m) => m.result);
+    if (roundDone) {
+      div.playedRounds = nextRound;
+      div.table.forEach((row, i) => row.positionHistory.push(i + 1));
+    }
+    this.season.complete = isSeasonComplete(this.season);
   }
 
   simulateSeason(): void {

@@ -16,7 +16,8 @@ test("create, simulate a season, view results, advance, and share", async ({ pag
   await expect(page.getByTestId("controls")).toBeVisible();
   await expect(page.getByText(/Season 1/)).toBeVisible();
 
-  // Simulate one round, then the whole season.
+  // Simulate one match, one round, then the whole season.
+  await page.getByTestId("sim-match").click();
   await page.getByTestId("sim-round").click();
   await page.getByTestId("sim-season").click();
   await expect(page.getByTestId("season-complete")).toBeVisible();
@@ -48,7 +49,12 @@ test("create, simulate a season, view results, advance, and share", async ({ pag
   await page.getByTestId("tab-stats").click();
   await expect(page.getByRole("heading", { name: /All-time/i })).toBeVisible();
 
-  // Creator tools expose the hidden Goal Table.
+  // Edit-teams mass grid renders editable stat inputs.
+  await page.getByTestId("tab-edit").click();
+  await expect(page.getByRole("heading", { name: /Edit division/i })).toBeVisible();
+  await expect(page.locator("table.grid input[type='number']").first()).toBeVisible();
+
+  // Creator tools expose the editable hidden Goal Table.
   await page.getByTestId("tab-creator").click();
   await expect(page.getByRole("heading", { name: /Goal Table/i })).toBeVisible();
 });

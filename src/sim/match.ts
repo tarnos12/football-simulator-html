@@ -19,7 +19,8 @@ import {
   MATCH,
   WEATHER,
   WeatherKind,
-  goalTableLookup,
+  GOAL_TABLE,
+  goalTableLookupWith,
   type LeagueRules,
 } from "../config";
 import type { CoachAttributeId } from "../config";
@@ -34,6 +35,11 @@ export interface MatchContext {
   derby?: boolean;
   homeMotivated?: boolean;
   awayMotivated?: boolean;
+  /** Creator-edited Goal Table (§23); defaults to the committed table. */
+  goalTable?: readonly (readonly number[])[];
+  /** League-strength bonus added to Att/Def for international play (§19). */
+  homeStrengthBonus?: number;
+  awayStrengthBonus?: number;
 }
 
 interface StatMods {
@@ -134,6 +140,12 @@ function buildEffectiveTeams(
     hSta += MATCH.homeAdvantage.sta;
   }
 
+  // League strength (§19): a stronger league adds to Att & Def (not stamina).
+  hAtt += ctx.homeStrengthBonus ?? 0;
+  hDef += ctx.homeStrengthBonus ?? 0;
+  aAtt += ctx.awayStrengthBonus ?? 0;
+  aDef += ctx.awayStrengthBonus ?? 0;
+
   // Big-team advantage: club-size gap ≥ threshold → bigger club +Att/+Def.
   if (rules.bigTeamAdvantage) {
     const gap = home.clubSize - away.clubSize;
@@ -203,9 +215,10 @@ function resolveHalf(
   const homeRoll = homeBase + Math.max(0, skillDiff);
   const awayRoll = awayBase + Math.max(0, -skillDiff);
 
+  const table = ctx.goalTable ?? GOAL_TABLE;
   return {
-    homeGoals: goalTableLookup(homeDiff, homeRoll),
-    awayGoals: goalTableLookup(awayDiff, awayRoll),
+    homeGoals: goalTableLookupWith(table, homeDiff, homeRoll),
+    awayGoals: goalTableLookupWith(table, awayDiff, awayRoll),
     homeRoll,
     awayRoll,
     homeDiff,
