@@ -24,7 +24,6 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: E2E (Playwright)
+        # No PLAYWRIGHT_BROWSERS_PATH override: install and test both use the
+        # default cache. The config's executablePath is undefined off-sandbox.
         run: npx playwright test
-        env:
-          # In CI, let Playwright use the browser it just installed.
-          PLAYWRIGHT_BROWSERS_PATH: "0"
