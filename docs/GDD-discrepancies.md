@@ -15,7 +15,9 @@ value — a discrepancy is recorded here and the fix applied **only after the au
 
 | # | Location (sheet / GDD §) | Issue | Proposed fix | Author decision | Status |
 |---|---|---|---|---|---|
-| _(none yet)_ | | | | | |
+| 1 | `How_to_calculate_match_results` worked example vs GDD §7/§9 | GDD says Home advantage = **+1 Att/Def/Sta**, but the workbook's worked example applies **+1 Att/Def only** (Stamina is *not* boosted by home). Reproducing the GDD/workbook worked example `4–1 (1–0)` (the Phase-2 gate) **requires** Att/Def only. | Follow the workbook: home = +1 Att/Def. Made tunable via `config.homeAdvantage.stats` so it can be flipped to include Sta if the author wants. | _pending author confirm_ | Applied (workbook value), flagged |
+| 2 | `Location_and_Weather` / GDD §10, §24 | **Snowing** gameplay effect undecided in source ("maybe stamina max 5"). | Implement as config-driven cap (`config.weather.snow.staminaCapEnabled`), **default OFF** (cosmetic/attendance only) until author confirms. Attendance effect (−20% home / −75% away) is applied per workbook. | _pending author confirm_ | Applied (default off), flagged |
+| 3 | `Location_and_Weather` / GDD §10, §24 | **Very warm** gameplay effect: workbook says "the stamina negation/equaliser for first half is removed" (i.e. first-half stamina is applied at **full**, not halved). GDD had it `[OPEN]`. | Implemented per workbook: Very warm ⇒ H1 stamina not halved. Tunable. | _pending author confirm_ | Applied (workbook value), flagged |
 
 ## Open GDD items to resolve before/at the phase that needs them (GDD §24)
 
