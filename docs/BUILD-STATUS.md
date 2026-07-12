@@ -7,8 +7,8 @@ Live status of the phased build so any session can resume cold. Updated in the
 
 | Phase | Status | Branch | Merged to main |
 |---|---|---|---|
-| 1 — Foundation (model, config, RNG, sharing, CI) | ✅ Done | `Phase-1` | pending |
-| 2 — Match engine (`sim/`) | ⏳ Next | `Phase-2` | — |
+| 1 — Foundation (model, config, RNG, sharing, CI) | ✅ Done | `Phase-1` | ✅ |
+| 2 — Match engine (`sim/`) | ✅ Done | `Phase-2` | pending |
 | 3 — League play (`league/`, `stats/`) | ⬜ Pending | `Phase-3` | — |
 | 4 — Systemic flavour (`systems/`) | ⬜ Pending | `Phase-4` | — |
 | 5 — Seasons, cups & full UI (`ui/`) | ⬜ Pending | `Phase-5` | — |
@@ -38,6 +38,24 @@ Live status of the phased build so any session can resume cold. Updated in the
 
 **Gate met:** league built in memory, round-trips losslessly (byte-identical),
 same seed ⇒ same random stream. ✔
+
+## Phase 2 — delivered
+
+- **`src/sim/match.ts`** — full §8 two-half resolution: who-has-the-day (one roll
+  each, net to winner's Att/Def/Sta), Att-vs-Def, stamina share (halved toward
+  zero in H1, full in H2), all §9 modifiers (home, big-team, motivation, derby
+  halving, form, weather: light-rain/heavy-rain-cap/muddy/windy/very-warm), coach
+  attribute stat traits, then 2D6 + coach-skill diff (capped 4) → Goal-Table
+  lookup. Produces `Full (HT)` scores.
+- **`src/sim/decider.ts`** — overtime (second-half re-roll), penalties (50/50 with
+  Ice-cold/Cursed traits), plausible shootout score, single-decider/aggregate
+  resolution (§15).
+- **Tests (12 new, 35 total):** reproduces the workbook worked example
+  `4–1 (1–0)` exactly (scripted dice), same seed ⇒ identical result, batch bounds,
+  neutral-ground & heavy-rain modifier effects, penalty probabilities & shootout.
+
+**Gate met:** match reproducible from seed; GDD worked example reproduces; no
+`Math.random`/wall-clock in `sim/`; unit + determinism tests green. ✔
 
 ## Discrepancies logged
 
