@@ -104,6 +104,10 @@ export interface CupConfig {
   advancePerGroup: number;
   finalNeutralGround: boolean;
   rulesOverride?: Partial<LeagueRules>;
+  /** Teams that auto-pass the first knockout round (e.g. top-division sides) (§14). */
+  byeTeamIds?: string[];
+  /** Seeded teams spread one-per-group in a group stage (§14). */
+  seedTeamIds?: string[];
 }
 
 /** The complete, shareable league system (§22). */

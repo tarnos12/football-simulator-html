@@ -72,3 +72,16 @@ test("championship split (§6): top division splits into two groups", async ({ p
   await page.getByRole("button", { name: /Championship group/i }).click();
   await expect(page.locator("table.grid tbody tr").first()).toBeVisible();
 });
+
+test("world/international (§19): countries + strength-weighted Champions Cup", async ({ page }) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Create a World/i }).click();
+  await expect(page.getByText(/World season 1/)).toBeVisible();
+
+  await page.getByRole("button", { name: /Sim all seasons/i }).click();
+  await page.getByRole("button", { name: /Run Champions Cup/i }).click();
+
+  await page.getByRole("button", { name: /International/i }).click();
+  await expect(page.getByRole("heading", { name: /Champions Cup/i })).toBeVisible();
+  await expect(page.getByText(/win the Champions Cup/i)).toBeVisible();
+});
