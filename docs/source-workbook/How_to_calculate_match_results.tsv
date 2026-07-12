@@ -1,0 +1,244 @@
+
+	Game result calculation
+
+	Overview
+	Roll one time for each team - to see "Who has the day"
+	Roll 2 times for each team per game, one roll each per half of the game
+	The attack of a team is compared to the other teams defence for each roll.
+	Then all other bonuses apply, the end result difference decides what column to look in the Goal table sheet.
+	Goal table - Roll 2D6 - add the coach difference to the team with the better coach
+	Look at the roll and see how many goals were scored in the goal table.
+
+	Example teams
+		Attack	Defence	Stamina	Form	Coach
+	Team A	5	2	7	-0.25	4
+	Team B	6	4	4	0.75	2
+
+
+	Example of a game
+
+	1. Each team rolls "Who has the day"
+		Team A rolls 1
+		Team B rolls 0
+		Team A will get plus 1 on Attack, Defence and Stamina for the whole game
+
+	2.Compare Attack and Defence
+		Team A has a base attack value of 5 - Team B has a base defence value of 4
+		So right now without any bonuses Team A has a result of 1 (5-4=1).
+
+		Team B has a base attack value of 6 - Team B has a base defence value of 2
+		So right now without any bonuses Team B has a result of 4 (6-2=4).
+
+	3. Compare Stamina
+		Team A has a Stamina of 7 and Team B has a stamina of 4, giving Team A bonus of 3.
+		Team A won the "Who has the day roll" by 1 increasing the difference to 4.
+		However in the first half the stamina difference is halved, (rounded down), resulting in 4 divided by 2 equals 2, no rounding needed.
+		So the result for Team A increase by 2 from 1 to 3.
+		So the result for Team B decrease by 2 from 4 to 2, since Team As defence get stronger from stamina.
+
+	4. Adding bonuses
+		Who has the Day
+			Team A rolled 1 better on Who has the day so Attack/Defence increases by 1
+			Resulting in Team As value increase from 3 to 4.
+			Resulting in Team Bs value decreasing from 2 to 1.
+		Home field advantage - Team A gets plus 1 to Attack and Defence
+			So right now Team A has a result of 5 (4 previously +1 for home field)
+			So right now Team B has a result of 0 (1 previously, but Team A +1 for home field to defence decreasing the difference)
+		Form Team A has form -0.25 and Team B has from 0,75, which is a difference in plus 1 to team B
+			So right now Team A has a result of 4 (previously 5 but Team B decrease the difference with form by 1)
+			So right now Team A has a result of 1 (previously 0 Form increases the difference by 1)
+		Big Team Advantage - not applicable for example
+		Weather - not applicable for example
+		Motivation - not applicable for example
+		Coach Attribute -not applicable for example
+
+	5. Rolling the result and adding the Coach level
+		Team A has a result of 4 after all bonuses have been calculated.
+			Team A rolls a 7 and adds 2 because the level of the coach is 2 better than team B which gives a total of 9
+			Check the Goal table sheet on  team difference 4 - roll of 9 equals 1 goal scored.
+		Team B has a result of 1 after all bonuses have been calculated.
+			Team B rolls a 6, and doesn't add anything, because the opposing Coach is more skilled, so the result remains 6.
+			Check the Goal table sheet on  team difference 1- roll of 6 equals 0 goal scored.
+
+	AFTER FIRST HALF THE STANDINGS ARE
+	Team A - Team B 1-0
+
+	Now you redo step 2-5 for the second half
+
+	2.Compare Attack and Defence
+		Team A has an attack value of 5 - Team B has a defence value of 4
+		So right now without any bonuses Team A has a result of 1.
+
+		Team B has an attack value of 6 - Team B has a defence value of 2
+		So right now without any bonuses Team B has a result of 4.
+
+	3. Compare Stamina
+		Team A has a Stamina of 7 and Team B has a stamina of 4, giving Team A bonus of 3.
+		Team A won the "Who has the day roll" by 1 increasing the difference to 4.
+		Since this is the second half of the game, the full amount of Stamina remains.
+		So right now Team A has a result of 5 (1+4=5)
+		The result for Team B has a result of 0 (4-4=0)
+
+	4. Adding bonuses
+		Who has the Day
+			Team A rolled 1 better on Who has the day so Attack/Defence/Stamina all increases by one 
+			Resulting in Team As value increase from 5 to 6.
+			Resulting in Team Bs value decreasing from 0 to -1.
+
+		Home field advantage - Team A gets plus 1 to Attack and Defence
+			So right now Team A has a result of 7 (6 previously +1 for home field)
+			So right now Team B has a result of -2 (-1 previously, but Team A +1 def for home field)
+		Form Team A has form -0.25 and Team B has from 0,75, which is a difference in plus 1 to team B
+			So right now Team A has a result of 6 (previously 7 but Team B decrease the difference with form by 1)
+			So right now Team A has a result of -1 (previously -2 Form increases the difference by 1)
+		Big Team Advantage - not applicable for example
+		Weather - not applicable for example
+		Motivation - not applicable for example
+		Coach Attribute -not applicable for example
+
+	5. Rolling the result and adding the Coach level
+		Team A has a result of 6 after all bonuses have been calculated.
+			Team A rolls a 9 and adds 2 because the level of the coach is 2 better than team B which gives a total of 11
+			Check the Goal table sheet on  team difference 6 - roll of 11 equals 3 goals scored.
+		Team B has a result of -1 after all bonuses have been calculated.
+			Team B rolls a 10, and doesn't add anything, because the opposing Coach is more skilled, so the result remains 10
+			Check the Goal table sheet on  team difference -1 roll of 10 equals 1 goals scored.
+
+	THE FINAL SCORE OF THE GAME IS
+	Team A - Team B 4-1 (1-0)
+
+	OVERTIME - PENALTIES
+	In case it is a draw and the game doesn't allow the game to be a draw, for instance in a cup final, only one team can win. 
+	Or if the combined result of two games showdown are equal, overtime and penalties will kick in.
+
+	Overtime - Roll again for a results using the same roll modifications used for the second half.
+	Penalties - Simply 50% either way, and simulating a penalty shootout score. There are coach attributes that can give advantage/disadvantage to one team.
+
+
+	PLAYOFF - AGGREGATED RESULTS
+	Playoff can be either 1 game deciding the fate, like a final or qulification game. If it is a 1 game decider, the game is usually played on neutral ground. That is the decided by the creator if it should be.
+	But more commonly playoff will be, best out of a certain amount of games. For example best out of 3 games, then one team will have to win two games, iin these cases, the home game alternates between teams.
+	With the team who finished higer in the table or had more points, have the advantage of having one more home game.
+
+	Aggregated results, is almost always the combined result of 2 games between teams, one home and one away, and the team after both games with the best combined result win.
+	If the two teams after the end of the second game, has the same combined resutls, overtime and penalties should activate.
+
+
+
+	Motivation	There should be a small marker on the team in the Division Table and Result page to show that the team currently have a bonus.
+	A team that can reach any threshold in the league at a certain point of the season, the teams involved will start to get a bonus of +1 to Att/Def/Sta
+	At creation of the League/Division, you decide at what point of the season that the bonus sets in, you set the amount of games remaining of the season.
+
+	Example, Motivation is set to activate 5 games before the end of season, any team in contention of any threshhold in the league gets the bonus.
+		Bottom of Table, all three teams, A, B, C are in danger of being relegated/playing quualification, so all three teams get the bonus
+		5 games and 15 points remain to be played for, all three teams start to get the motivation bonus.
+		Games	Team	Points
+		33	Team A	16 points	Stay in the league
+		33	Team B	15 points	Qualification game
+		33	Team C	10 points	Relegated
+
+		Team A, draws match 34 get 1 point
+		Team B, loses match 34 get 0 points
+		Team C, wins match 34 get 3 points
+
+		Bottom of Table
+		4 games remain, and 12 points, so all three teams keep the bonus for the next game
+		Games	Team	Points
+		34	Team A	17 points	Stay in the league
+		34	Team B	15 points	Qualification game
+		34	Team C	13 points	Relegated
+
+		Team A, loses match 35 get 0 point
+		Team B, draws match 35 get 1 points
+		Team C, loses match 35 get 0 points
+
+		Bottom of Table
+		3 games remain, and 9 points, all three teams keep the bonus for the next game
+		Games	Team	Points
+		35	Team A	17 points	Stay in the league
+		35	Team B	16 points	Qualification game
+		35	Team C	13 points	Relegated
+
+		Team A, wins match 36 get 3 point
+		Team B, wins match 36 get 3 points
+		Team C, loses match 36 get 0 points
+
+		Bottom of Table
+		2 games remain, and 6 points, all three teams keep the bonus for the next game. Team C can still pass Team B on goal difference
+		Games	Team	Points
+		36	Team A	20 points	Stay in the league
+		36	Team B	19 points	Qualification game
+		36	Team C	13 points	Relegated
+
+		Team A, loses match 37 get 0 point
+		Team B, loses match 37 get 0 points
+		Team C, draws match 37 get 1 points
+
+		Bottom of Table
+		1 game remain, and 3 points, Team C loses the bonus, becuase there is no chance for them to pass Team B anymore.
+		Team B and Team C keep the motivation bonus for the last game, because they are still fighting to avoid the qualification spot.
+		Games	Team	Points
+		37	Team A	20 points	Stay in the league
+		37	Team B	19 points	Qualification game
+		37	Team C	14 points	Relegated
+
+
+	Match result generation
+	It should be possible to generate one match result at a time
+	It should be possible to generate one week/round of games, either per league system, or just for one division or cup
+	Perhaps it should be possible to generate a whole season in two clicks, one to initiate and one to confirm
+	At the end of a season summary should be revealed, you should also be able to go back and see all the results of the season at any point during a season.
+		In the season end result summary, it should show winners, relegated, promoted, cup winners etc, 
+
+	Before the first games of a new season, clicking on a team, all the changes from the previous season should be highlighted.
+
+
+	Viewing the results and tables in the game -League phase
+	Divison 1 Round 10		RESULTS	TABLE
+	<-- Prev. Week					Next week -->
+	Weather		Match		Score	Attendence
+	Sunny		Team A vs Team B		3-1 (1-0)	26 450
+	Overcast		Team C vs Team D		0-1 (0-1)	13 000
+	Light rain		Team E vs Team F		5-0 (2-0)	16 350
+	Heavy rain		Team G vs Team H		0-0 (0-0)	5 400
+	Sunny		Team I vs Team J		2-2 (2-0)	37 500
+	Light overcast		Team K vs Team L		3-2 (1-1)	18 100
+	Sunny		Team M vs Team N		1-0 (0-0)	12 500
+	Overcast		Team O vs Team P		2-0 (1-0)	16 500
+						Run next game/week results
+
+
+	Division 1		RESULTS	TABLE
+	Standings	Home	Away	Last X games	Attendence/Stats	Position in league after each game (see pic sheet for example)
+	Jersey + Team	Games played	Win Draw Loss	Goals/Goals con		Points
+	1. Team A	10	8 - 1 - 1	24 - 7		25⬆️	Champion
+	2. Team B	10	7 - 2 - 1	21 - 12		23⬇️
+	3. Team C	10	6 - 0 - 4	27 - 19		18
+	4. Team D	10	5 - 3 - 2	12 - 7		18
+	5. Team E	10	4 - 3 - 3	16 - 8		15 ⬆️
+	6. Team F	10	4 - 3 - 3	15 - 13		15
+	7. Team G	10	4 - 0 - 6	13 - 15		12
+	8. Team H	10	3 - 3 - 4	10 - 10		12
+	9. Team I	10	3 - 3 - 4	11 - 12		12
+	10. Team J	10	2 - 3 - 5	7 - 12		9
+	11. Team K	10	3 - 0 - 7	9 - 18		9
+	12. Team L	10	1 - 5 - 4	10 - 12		8
+	13. Team M	10	2 - 2 - 6	8 - 16		8
+	14. Team N	10	1 - 3 - 6	9 - 15		6	Qualifying game in phase 2 against team from lower league
+	15. Team O	10	1 - 1 - 8	4 - 16		4	Relegated
+	16. Team P	10	1 - 0 - 9	2 - 29		3 ⬇️	Relegated
+						Run next game/week results
+
+	On both Result and Table tab, there should be a way to jump to another division, by arrows, or directly to a division/cup of choice from a dropdown list
+	If there is are connected league systems in order for an international cup/league to be played, you should be able to switch country as well, to see the standings/results in all countries leagues
+
+	Viewing the results and tables in the game - Cup phase
+	National Cup QF		CUP RESULTS	CUP TABLE/CUP DRAW
+	<-- Prev. Week					Next week -->
+	Weather		Match		Score	Attendence
+	Sunny		Team A vs Team B		3-1 (1-0)	26 450
+	Overcast		Team C vs Team D		0-1 (0-1)	13 000
+	Light rain		Team E vs Team F		5-0 (2-0)	16 350
+	Heavy rain		Team G vs Team H		0-0 (0-0)	5 400
+
+						Run next game/week results

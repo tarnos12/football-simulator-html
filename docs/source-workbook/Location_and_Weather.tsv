@@ -1,0 +1,58 @@
+
+		Example of location Lunds BK -10/-5 (X on the map)- location matters for geograchical divisions, weather, attendence and derbys.
+		If two teams are from the same location in the grid it is derby, in higher divisions maybe even the location next to it might be called a derby.
+		It should also be possible to view all the teams location, from either the whole league, or division(s)
+		Maybe even possibility to add and remove teams from the location map directly.
+
+	10
+	9																					Attendence for a club in cell location 10/10 (yellow cell on the left), and crowd when they play away games
+	8																						8-10/8-10 100% of their away crowd joining
+	7																						5-7/5-7 60% of their away crowd joining
+	6																						1-4/1-4 40% of their away crowd joining
+	5																						-1 to -5/ -1 to -5 20% of their away crowd joining
+	4																						Anything further away 0% of their away crowd joining
+	3
+	2
+	1
+	-1
+	-2
+	-3
+	-4
+	-5
+	-6
+	-7
+	-8
+	-9
+	-10						X
+		-10	-9	-8	-7	-6	-5	-4	-3	-2	-1	1	2	3	4	5	6	7	8	9	10
+
+
+All table should be able to access for me as a creator, if tweaks and balancing needs to be done.
+
+		Weather
+		Weather is based on location as well. For example if heavy rain happens in cell 4/-2, the cells around it is covered in light rain, marked in the map above.
+
+
+		Weather					Location rules										Impact on game								Picture representation in list of match results
+		Sunny					Randomly fill all the cells not affected by weather conditions that impact games										No impact to game								☀️
+		Light overcast					Randomly fill all the cells not affected by weather conditions that impact games										No impact to game								🌤️
+		Heavy overcast					Randomly fill all the cells not affected by weather conditions that impact games										No impact to game								☁️
+		Light rain					Connected to Heavy rain, but can also appear separately randomly in cells.										Plus 1 to attack for both teams								🌦️
+		Heavy rain					Random location spot, light rain one cell around it.										Attack and defence caps at 5 for both teams								⛈️
+		Snowing					Random 2x2 cells, if appering 										Not decided yet- maybe stamina max 5 for teams								❄️
+		Muddy					Random location spot										Plus 1 to defence for both teams								🕳️
+		Windy					Random location spot										Plus 1 to att and def to each teams, but one half of the game each.								💨
+		Very warm					Random location spot, cells around should be sunny 										The stamina negation/equalifyer for first half is removed.								🔥
+
+		The weather percentages could change.
+		Ideas on how Weather should be created and distributed over the map.
+
+		Heavy Rain						Comment
+		Light Rain						Comment
+		Snowing						Comment
+		Muddy						Comment
+		Windy						Comment
+		Very Warm						Comment
+		Sunny						Comment
+		Light Overcast						Comment
+		Heavy Overcast						Comment
