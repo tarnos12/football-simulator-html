@@ -14,3 +14,11 @@ Desktop.ini
 # Node
 node_modules/
 npm-debug.log*
+
+# Build / test artifacts
+dist/
+coverage/
+playwright-report/
+test-results/
+.vite/
+*.local
