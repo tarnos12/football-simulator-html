@@ -10,8 +10,8 @@ Live status of the phased build so any session can resume cold. Updated in the
 | 1 — Foundation (model, config, RNG, sharing, CI) | ✅ Done | `Phase-1` | ✅ |
 | 2 — Match engine (`sim/`) | ✅ Done | `Phase-2` | ✅ |
 | 3 — League play (`league/`, `stats/`) | ✅ Done | `Phase-3` | ✅ |
-| 4 — Systemic flavour (`systems/`) | ✅ Done | `Phase-4` | pending |
-| 5 — Seasons, cups & full UI (`ui/`) | ⬜ Pending | `Phase-5` | — |
+| 4 — Systemic flavour (`systems/`) | ✅ Done | `Phase-4` | ✅ |
+| 5 — Seasons, cups & full UI (`ui/`) | ✅ Done | `Phase-5` | pending |
 
 ## Phase 1 — delivered
 
@@ -100,6 +100,34 @@ promotion/relegation, browsable round-by-round; deterministic. ✔
 **Gate met:** each toggle deterministically changes outcomes; flavour (weather,
 attendance, incidents, motivation, derby) renders in results; numbers verified vs
 Excel; no raw numbers leak to players (icons/markers only). ✔
+
+## Phase 5 — delivered
+
+- **`src/league/cup.ts`** — knockout + group→knockout cups (random draw, neutral
+  final, deciders for ties) (§14).
+- **`src/game/campaign.ts`** — multi-season orchestrator: season sim with flavour,
+  cups, history archive, between-season progression + promotion/relegation loop.
+- **`src/ui/`** — full React UI: `CreateWizard`, `StandingsTable` (jerseys,
+  threshold pills, movement arrows, home/away sub-views, markers, position chart),
+  `ResultsView` (weather icons + tooltips, `Full (HT)` scores, attendance,
+  derby/motivation/incident/OT markers, week nav), `TeamCardModal` (+ edit, change
+  highlights), `CupView` (bracket/groups), `SeasonSummary`, `StatsView` (§20),
+  `CreatorTools` (rules editing + hidden Goal Table + reason lists), `ShareBar`
+  (export/import share code), `Jersey` (SVG mini/preview), `PositionChart`.
+- **CI:** `.github/workflows/ci.yml` (typecheck + Vitest + build + Playwright);
+  `deploy.yml` publishes to Pages on `main`.
+- **Tests:** 58 Vitest green; Playwright e2e green (create → simulate season →
+  table/results → summary champion → advance season → history/creator). Built
+  artifact smoke-tested via `vite preview` (the real production base path).
+
+**Gate met:** multi-season loop runs with records tracked; league exports + re-imports
+intact; every §21 screen reachable; **both** Vitest and Playwright suites green;
+deployed build smoke-tested. ✔
+
+## Build is COMPLETE
+
+All 5 phases done and merged to `main`. Run locally: `npm ci && npm run dev`.
+Verify: `npm run typecheck && npm test && npm run build && npm run e2e`.
 
 ## Discrepancies logged
 
