@@ -9,8 +9,8 @@ Live status of the phased build so any session can resume cold. Updated in the
 |---|---|---|---|
 | 1 — Foundation (model, config, RNG, sharing, CI) | ✅ Done | `Phase-1` | ✅ |
 | 2 — Match engine (`sim/`) | ✅ Done | `Phase-2` | ✅ |
-| 3 — League play (`league/`, `stats/`) | ✅ Done | `Phase-3` | pending |
-| 4 — Systemic flavour (`systems/`) | ⬜ Pending | `Phase-4` | — |
+| 3 — League play (`league/`, `stats/`) | ✅ Done | `Phase-3` | ✅ |
+| 4 — Systemic flavour (`systems/`) | ✅ Done | `Phase-4` | pending |
 | 5 — Seasons, cups & full UI (`ui/`) | ⬜ Pending | `Phase-5` | — |
 
 ## Phase 1 — delivered
@@ -78,6 +78,28 @@ same seed ⇒ same random stream. ✔
 
 **Gate met:** a full season simulates end-to-end with a correct table and correct
 promotion/relegation, browsable round-by-round; deterministic. ✔
+
+## Phase 4 — delivered
+
+- **`src/systems/weather.ts`** — per-round weather grid generation (climate-gated),
+  cell lookup by team location.
+- **`src/systems/attendance.ts`** — §13 crowd calc; reproduces the workbook example
+  (24 867).
+- **`src/systems/derby.ts`**, **`motivation.ts`**, **`corruption.ts`**,
+  **`crowd.ts`**, **`form.ts`**, **`progression.ts`** — derby detection, late-season
+  contention, season-start corruption deductions, per-game incidents, post-match
+  form change, between-season stat/size/org/ownership/coach changes + highlights.
+- **`src/systems/flavour.ts`** — assembles the season `SimHooks` (pre-match context:
+  weather/derby/motivation; post-match: attendance/incidents/form) and season-outcome
+  mapping. `league/season.ts` gained a post-match hook seam (separate RNG stream so
+  flavour never perturbs match resolution).
+- **Tests (11 new, 58 total):** attendance worked example, weather determinism +
+  climate gating, derby, corruption (honourable/frequency), form bounds, progression
+  bounds, full flavoured season, toggle-changes-outcome, granularity determinism.
+
+**Gate met:** each toggle deterministically changes outcomes; flavour (weather,
+attendance, incidents, motivation, derby) renders in results; numbers verified vs
+Excel; no raw numbers leak to players (icons/markers only). ✔
 
 ## Discrepancies logged
 
