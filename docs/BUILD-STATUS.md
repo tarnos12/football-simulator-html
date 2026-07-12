@@ -124,10 +124,19 @@ Excel; no raw numbers leak to players (icons/markers only). ✔
 intact; every §21 screen reachable; **both** Vitest and Playwright suites green;
 deployed build smoke-tested. ✔
 
-## Build is COMPLETE
+## Build is COMPLETE ✅
 
-All 5 phases done and merged to `main`. Run locally: `npm ci && npm run dev`.
-Verify: `npm run typecheck && npm test && npm run build && npm run e2e`.
+All 5 phases done and merged to `main`. **CI green** (typecheck + 58 Vitest +
+build + Playwright e2e) and **deployed live**.
+
+- **Play it:** https://tarnos12.github.io/football-simulator-html/
+- Run locally: `npm ci && npm run dev`
+- Verify: `npm run typecheck && npm test && npm run build && npm run e2e`
+
+**Deployment note:** the repo's Pages source is "Deploy from a branch" (`gh-pages`),
+so `deploy.yml` builds and publishes `dist/` to `gh-pages` (the app replaced the
+old landing page). If you later switch Pages to "GitHub Actions" as the source,
+swap back to an `upload-pages-artifact` + `deploy-pages` workflow.
 
 ## Discrepancies logged
 
