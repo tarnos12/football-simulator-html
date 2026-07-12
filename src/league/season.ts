@@ -15,7 +15,7 @@ import { computeTable, orderTable } from "./standings";
 import { generateSchedule, roundCount } from "./schedule";
 import type { DivisionSeason, SeasonState } from "./types";
 
-/** Hook for higher layers (systems/) to enrich each match's context. */
+/** Hook for higher layers (systems/) to enrich each match's context (pre-match). */
 export type ContextFor = (
   homeId: string,
   awayId: string,
@@ -23,6 +23,20 @@ export type ContextFor = (
   season: SeasonState,
   league: LeagueSystem,
 ) => Partial<MatchContext>;
+
+/** Post-match hook (systems/): attendance, crowd incidents, form updates. */
+export type AfterMatch = (
+  result: import("../model/types").MatchResult,
+  div: DivisionSeason,
+  season: SeasonState,
+  league: LeagueSystem,
+  rng: RNG,
+) => void;
+
+export interface SimHooks {
+  context?: ContextFor;
+  afterMatch?: AfterMatch;
+}
 
 function divisionRules(league: LeagueSystem, div: Division): LeagueRules {
   return { ...league.rules, ...(div.rulesOverride ?? {}) };
@@ -72,7 +86,7 @@ export function simulateMatch(
   season: SeasonState,
   div: DivisionSeason,
   match: ScheduledMatch,
-  contextFor?: ContextFor,
+  hooks?: SimHooks,
 ): void {
   if (match.result) return;
   const leagueDivision = league.levels
@@ -82,10 +96,13 @@ export function simulateMatch(
   const home = league.teams[match.homeId];
   const away = league.teams[match.awayId];
   const base: MatchContext = { rules, weather: "sunny" };
-  const extra = contextFor?.(match.homeId, match.awayId, div, season, league) ?? {};
+  const extra = hooks?.context?.(match.homeId, match.awayId, div, season, league) ?? {};
   const ctx: MatchContext = { ...base, ...extra, rules };
-  const rng = new RNG(matchSeed(league, season.seasonNumber, div.divisionId, match));
-  match.result = resolveMatch(home, away, ctx, rng);
+  const seed = matchSeed(league, season.seasonNumber, div.divisionId, match);
+  match.result = resolveMatch(home, away, ctx, new RNG(seed));
+  // Post-match flavour (attendance, incidents, form) uses a separate stream so
+  // adding it never perturbs the match-resolution stream.
+  hooks?.afterMatch?.(match.result, div, season, league, new RNG(seed + "::post"));
 }
 
 /** Recompute and re-order a division's table; record positions when a round closes. */
@@ -111,12 +128,12 @@ export function simulateDivisionRound(
   league: LeagueSystem,
   season: SeasonState,
   div: DivisionSeason,
-  contextFor?: ContextFor,
+  hooks?: SimHooks,
 ): ScheduledMatch[] {
   const nextRound = div.playedRounds + 1;
   if (nextRound > div.totalRounds) return [];
   const roundMatches = div.schedule.filter((m) => m.round === nextRound);
-  for (const m of roundMatches) simulateMatch(league, season, div, m, contextFor);
+  for (const m of roundMatches) simulateMatch(league, season, div, m, hooks);
   div.playedRounds = nextRound;
   refreshTable(league, div);
   // Record each team's position after this completed round.
@@ -128,9 +145,9 @@ export function simulateDivisionRound(
 export function simulateSystemRound(
   league: LeagueSystem,
   season: SeasonState,
-  contextFor?: ContextFor,
+  hooks?: SimHooks,
 ): void {
-  for (const div of season.divisions) simulateDivisionRound(league, season, div, contextFor);
+  for (const div of season.divisions) simulateDivisionRound(league, season, div, hooks);
   season.complete = season.divisions.every((d) => d.playedRounds >= d.totalRounds);
 }
 
@@ -138,11 +155,11 @@ export function simulateSystemRound(
 export function simulateWholeSeason(
   league: LeagueSystem,
   season: SeasonState,
-  contextFor?: ContextFor,
+  hooks?: SimHooks,
 ): void {
   for (const div of season.divisions) {
     while (div.playedRounds < div.totalRounds) {
-      simulateDivisionRound(league, season, div, contextFor);
+      simulateDivisionRound(league, season, div, hooks);
     }
   }
   season.complete = true;
