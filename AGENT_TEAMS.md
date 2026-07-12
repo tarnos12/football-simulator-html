@@ -203,8 +203,8 @@ is treated as an ordinary file, not configuration.
 
 ## 8. Best practices
 
-- **Team size: start with 3–5.** Three focused teammates often beat five
-  scattered ones; scale up only when work genuinely parallelizes.
+- **Team size: up to 10 live.** Start focused and scale up to 10 as work
+  genuinely parallelizes; a few focused teammates often beat many scattered ones.
 - **~5–6 tasks per teammate** keeps everyone busy and lets the lead reassign if
   someone stalls (15 independent tasks → ~3 teammates).
 - **Self-contained tasks** — a function, a test file, a review. Too small →

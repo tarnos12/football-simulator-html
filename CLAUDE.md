@@ -106,7 +106,7 @@ build team → build to next milestone → QA sign-off.
 - **Do** give each agent specific file ownership. **Don't** let two agents share/overwrite a file.
 - **Do** define concrete deliverables. **Don't** use vague outputs.
 - **Do** name recipients explicitly (who messages whom). **Don't** assume they'll infer it.
-- **Do** keep the **live team at 3–5**. **Don't** run 10+ swarms (each agent ≈ 1× more cost).
+- **Do** run **as many teammates as the phase needs, up to 10 live**. **Don't** exceed 10 (each agent ≈ 1× more cost).
 - **Do** give full context in every spawn prompt — teammates inherit **no** conversation history.
 
 ## Team hygiene
@@ -131,8 +131,8 @@ Match reasoning tier to task difficulty:
 
 ## Roster (a BENCH, not a standing team)
 
-Generic archetypes — instantiate per project against the actual modules. Spawn only the **3–5** the
-current milestone needs at once. Roles marked *(subagent)* are usually focused subagents spawned by
+Generic archetypes — instantiate per project against the actual modules. Spawn as many as the
+current milestone needs, up to **10 live** at once. Roles marked *(subagent)* are usually focused subagents spawned by
 the relevant teammate: they hand off an artifact and don't need parallel back-and-forth.
 
 | Archetype | Model | Owns / does | Talks to |
@@ -154,8 +154,8 @@ most-touched file from becoming the main merge-conflict point.
 
 For **game projects**, instantiate from this expanded bench in addition to the generic archetypes
 above (ignore this table for non-game projects). Each row is still an *archetype* — map it to the
-actual module and pick the model by task difficulty. Keep the live team at 3–5 per milestone — this
-is a menu, not a headcount.
+actual module and pick the model by task difficulty. Keep the live team to at most 10 per milestone —
+this is a menu, not a headcount.
 
 | Discipline | Model | Owns / does | Talks to |
 |---|---|---|---|
