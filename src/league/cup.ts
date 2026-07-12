@@ -38,6 +38,10 @@ export interface CupState {
   rounds: CupRound[];
   championId?: string;
   complete: boolean;
+  /** Teams auto-passing the first knockout round; injected before round 2 (§14). */
+  pendingByes: string[];
+  /** Which group each team came from, to keep group-mates apart until the final. */
+  groupOf: Record<string, string>;
 }
 
 function roundName(remaining: number): string {
@@ -52,22 +56,32 @@ function roundName(remaining: number): string {
 /** Create the initial cup state (first knockout round, or group stage). */
 export function createCup(league: LeagueSystem, cfg: CupConfig, season: number): CupState {
   const rng = new RNG(`${league.seed}::cup::s${season}::draw`);
-  const state: CupState = { name: cfg.name, format: cfg.format, groups: [], rounds: [], complete: false };
+  const state: CupState = {
+    name: cfg.name, format: cfg.format, groups: [], rounds: [], complete: false,
+    pendingByes: [], groupOf: {},
+  };
 
   if (cfg.format === "groupThenKnockout") {
-    const pool = rng.shuffle([...cfg.teamIds]);
-    const groupCount = Math.max(1, Math.floor(pool.length / cfg.groupSize));
-    for (let g = 0; g < groupCount; g++) {
-      const teamIds = pool.slice(g * cfg.groupSize, (g + 1) * cfg.groupSize);
-      state.groups.push({
-        name: `Group ${String.fromCharCode(65 + g)}`,
-        teamIds,
-        schedule: generateSchedule(teamIds, 1, false),
-        advance: [],
-      });
-    }
+    const seeds = cfg.seedTeamIds ?? [];
+    const rest = rng.shuffle(cfg.teamIds.filter((id) => !seeds.includes(id)));
+    const seedPool = rng.shuffle([...seeds]);
+    const groupCount = Math.max(1, Math.floor(cfg.teamIds.length / cfg.groupSize));
+    const buckets: string[][] = Array.from({ length: groupCount }, () => []);
+    // Seeded teams go one per group first; the rest fill round-robin.
+    seedPool.forEach((id, i) => buckets[i % groupCount].push(id));
+    rest.forEach((id, i) => buckets[i % groupCount].push(id));
+    buckets.forEach((teamIds, g) => {
+      const name = `Group ${String.fromCharCode(65 + g)}`;
+      for (const id of teamIds) state.groupOf[id] = name;
+      state.groups.push({ name, teamIds, schedule: generateSchedule(teamIds, 1, false), advance: [] });
+    });
   } else {
-    state.rounds.push(firstKnockoutRound(rng, cfg.teamIds));
+    // Knockout: teams with a bye skip round 1 and enter round 2.
+    const byes = new Set(cfg.byeTeamIds ?? []);
+    const active = cfg.teamIds.filter((id) => !byes.has(id));
+    state.pendingByes = cfg.teamIds.filter((id) => byes.has(id));
+    state.rounds.push(firstKnockoutRound(rng, active.length ? active : cfg.teamIds));
+    if (active.length === 0) state.pendingByes = [];
   }
   return state;
 }
@@ -77,6 +91,25 @@ function firstKnockoutRound(rng: RNG, teamIds: readonly string[]): CupRound {
   const ties: CupTie[] = [];
   for (let i = 0; i + 1 < drawn.length; i += 2) ties.push({ homeId: drawn[i], awayId: drawn[i + 1] });
   return { name: roundName(drawn.length), ties };
+}
+
+/** Draw a knockout round, avoiding same-group pairings until the final (§14). */
+function drawKnockout(rng: RNG, teamIds: readonly string[], groupOf: Record<string, string>): CupRound {
+  const remaining = rng.shuffle([...teamIds]);
+  const ties: CupTie[] = [];
+  const isFinal = remaining.length === 2;
+  while (remaining.length >= 2) {
+    const home = remaining.shift()!;
+    // Prefer an opponent from a different group (unless this is the final).
+    let idx = 0;
+    if (!isFinal && groupOf[home]) {
+      const alt = remaining.findIndex((id) => groupOf[id] !== groupOf[home]);
+      if (alt >= 0) idx = alt;
+    }
+    const away = remaining.splice(idx, 1)[0];
+    ties.push({ homeId: home, awayId: away });
+  }
+  return { name: roundName(teamIds.length), ties };
 }
 
 function cupRules(league: LeagueSystem, cfg: CupConfig) {
@@ -96,10 +129,10 @@ export function playGroupStage(league: LeagueSystem, state: CupState, cfg: CupCo
     const table = orderTable(computeTable(group.teamIds, group.schedule, rules), group.schedule, rules);
     group.advance = table.slice(0, cfg.advancePerGroup).map((r) => r.teamId);
   }
-  // Seed the knockout stage from the advancers.
+  // Seed the knockout stage from the advancers, keeping group-mates apart.
   const advancers = state.groups.flatMap((g) => g.advance);
   const rng = new RNG(`${league.seed}::cup::s${season}::ko-draw`);
-  state.rounds.push(firstKnockoutRound(rng, advancers));
+  state.rounds.push(drawKnockout(rng, advancers, state.groupOf));
 }
 
 /** Play the current (latest) knockout round, then draw the next or crown a winner. */
@@ -135,14 +168,19 @@ export function playNextCupRound(league: LeagueSystem, state: CupState, cfg: Cup
     tie.result = result;
   }
 
-  const winners = round.ties.map((t) => t.winnerId!).filter(Boolean);
-  if (winners.length === 1) {
-    state.championId = winners[0];
+  let advancing = round.ties.map((t) => t.winnerId!).filter(Boolean);
+  // Inject the auto-pass byes before the second knockout round (§14).
+  if (state.pendingByes.length) {
+    advancing = [...advancing, ...state.pendingByes];
+    state.pendingByes = [];
+  }
+  if (advancing.length === 1) {
+    state.championId = advancing[0];
     state.complete = true;
     return;
   }
   const rng = new RNG(`${league.seed}::cup::s${season}::draw::${state.rounds.length}`);
-  state.rounds.push(firstKnockoutRound(rng, winners));
+  state.rounds.push(drawKnockout(rng, advancing, state.groupOf));
 }
 
 /** Play the whole cup to completion. */

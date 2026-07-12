@@ -13,8 +13,8 @@ Live status of the phased build so any session can resume cold. Updated in the
 | 4 — Systemic flavour (`systems/`) | ✅ Done | `Phase-4` | ✅ |
 | 5 — Seasons, cups & full UI (`ui/`) | ✅ Done | `Phase-5` | ✅ |
 | 6 — Creator tools, editors & fuller stats | ✅ Done | `Phase-6` | pending |
-| 7 — Multi-phase leagues (§6,§15) | ✅ Done | `Phase-7` | pending |
-| 8 — International (§19) + cup refinements | ⏳ Next | `Phase-8` | — |
+| 7 — Multi-phase leagues (§6,§15) | ✅ Done | `Phase-7` | ✅ |
+| 8 — International (§19) + cup refinements | ✅ Done | `Phase-8` | pending |
 
 ## Phase 1 — delivered
 
@@ -127,53 +127,31 @@ Excel; no raw numbers leak to players (icons/markers only). ✔
 intact; every §21 screen reachable; **both** Vitest and Playwright suites green;
 deployed build smoke-tested. ✔
 
-## Build is COMPLETE ✅
+## Phase 8 — delivered (international + cup refinements)
 
-All 5 phases done and merged to `main`. **CI green** (typecheck + 58 Vitest +
-build + Playwright e2e) and **deployed live**.
+- **International leagues/cups (§19)** — `league/international.ts`: teams from
+  different leagues meet on neutral ground; each league's **strength 1–9** is added
+  to its teams' Att & Def, so a stronger league is favoured even with lower base
+  stats (verified: strength-9 beats strength-1 >75/100). Runs as a strength-weighted
+  knockout. `game/world.ts`: a World of N countries (each its own campaign) + a
+  Champions Cup drawing each country's top teams; strength editor; advance-all.
+  UI: `WorldView` (country switcher, per-country league views, International bracket,
+  strength editor), reachable via the wizard's "Create a World" button.
+- **Cup refinements (§14)** — `league/cup.ts`: auto-pass byes (top sides skip round 1,
+  injected before round 2), group seeding (seeded teams spread one-per-group), and
+  same-group avoidance in knockout draws until the final.
+- Tests: 79 Vitest (7 new) + e2e for the world/Champions-Cup flow.
 
-- **Play it:** https://tarnos12.github.io/football-simulator-html/
-- Run locally: `npm ci && npm run dev`
-- Verify: `npm run typecheck && npm test && npm run build && npm run e2e`
+## Build status
 
-**Deployment note:** the repo's Pages source is "Deploy from a branch" (`gh-pages`),
-so `deploy.yml` builds and publishes `dist/` to `gh-pages` (the app replaced the
-old landing page). If you later switch Pages to "GitHub Actions" as the source,
-swap back to an `upload-pages-artifact` + `deploy-pages` workflow.
+All **8 phases** built, tested, and merged to `main`; **CI green** and **deployed**
+(https://tarnos12.github.io/football-simulator-html/). Run locally: `npm ci && npm run dev`.
 
-## Phase 6 — delivered (gap-closing after full GDD/Excel audit)
-
-Audit found the core loop was faithful but several documented features were missing.
-Phase 6 closes the self-contained ones:
-- **Edit-Division mass grid** (§5/§21) — all teams' stats in one editable screen.
-- **Jersey editor** (§21) — 2–3 shirt/short colours + pattern, live preview; reachable from team card and edit grid.
-- **Coach-attribute hand-editing** (§12) in the team card.
-- **Editable hidden tables wired into the sim** (§23): Goal Table + corruption/crowd reason lists persist to `configOverrides` and are read by the match engine / systems (`model/config-resolve.ts`).
-- **Per-division rule overrides** + **reorderable tie-breaks** (§7).
-- **"Last 5 (Form)" table sub-view** (§21); **single-match simulation** (§4).
-- **Fuller §20 records** (highest/lowest winning points, title margins, points to stay up, most-points-relegated, goals/GD extremes, highest-scoring draw) + **browsable past-season final tables**.
-- Tests: 64 Vitest (6 new) + e2e extended (sim-match, edit grid, editable goal table). League-strength + goalTable plumbing added to the match engine for Phase 7/8.
-
-## Phase 7 — delivered (multi-phase leagues)
-
-- **Championship split (§6)** — `league/phases.ts`: after the regular season, a
-  division whose model phase defines a `split` regroups teams by position into
-  sub-league groups (top/bottom), carrying points forward (full/zero/half), each
-  group playing its own round-robin. Promotion/relegation, summary, and stats read
-  the **combined final ordering** (top group first). Wired through `campaign` (sim
-  match/round/season all advance phases). Creatable via the wizard's "Championship
-  split" toggle; UI shows Regular-season/Championship/Relegation group tabs in the
-  table & results, with combined-position threshold pills.
-- **Playoff series (§15)** — `league/playoff.ts`: single decider game, two-leg
-  aggregate, and best-of-N series (higher seed hosts the extra game; draws don't
-  count; ties → overtime/penalties). Deterministic; used by cups and available to
-  the engine.
-- Tests: 80 Vitest (8 new — split spawn, carry modes, champion-from-group, pro/rel,
-  determinism; playoff single/two-leg/best-of/determinism) + e2e for the split.
-
-**Partial / follow-up:** auto-scheduled promotion/relegation *qualification*
-playoffs between tiers (the primitive exists, not yet auto-run) and a
-season-boundary league-restructuring UI (change team/division counts) remain.
+**Known remaining (smaller) items:** auto-scheduled promotion/relegation *qualification
+playoffs* between tiers (the `league/playoff.ts` engine exists and is tested, but isn't
+auto-run each season), a season-boundary league-restructuring UI (change team/division
+counts between seasons), and the GDD `[OPEN]` ideas (add/remove teams on the map,
+mid-season coach firing, draft mode).
 
 ## Discrepancies logged
 

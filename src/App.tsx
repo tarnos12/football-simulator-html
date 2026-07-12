@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./ui/styles.css";
 import { useCampaign } from "./ui/useCampaign";
+import { useWorld } from "./ui/useWorld";
+import { WorldView } from "./ui/WorldView";
 import { CreateWizard } from "./ui/CreateWizard";
 import { StandingsTable } from "./ui/StandingsTable";
 import { ResultsView } from "./ui/ResultsView";
@@ -17,6 +19,7 @@ type Tab = "table" | "results" | "map" | "cup" | "summary" | "stats" | "edit" | 
 
 export function App() {
   const { campaign, start, act, reset } = useCampaign();
+  const world = useWorld();
   const [tab, setTab] = useState<Tab>("table");
   const [divisionId, setDivisionId] = useState<string>("");
   const [teamModal, setTeamModal] = useState<string | null>(null);
@@ -26,10 +29,14 @@ export function App() {
     if (divisions.length && !divisions.some((d) => d.id === divisionId)) setDivisionId(divisions[0].id);
   }, [divisions, divisionId]);
 
+  if (world.world) {
+    return <WorldView world={world.world} act={world.act} onReset={world.reset} />;
+  }
+
   if (!campaign) {
     return (
       <Shell campaign={null} onImport={start} onReset={reset}>
-        <CreateWizard onCreate={start} />
+        <CreateWizard onCreate={start} onCreateWorld={world.start} />
       </Shell>
     );
   }

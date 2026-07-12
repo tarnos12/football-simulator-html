@@ -2,13 +2,17 @@ import { useState } from "react";
 import { RNG } from "../core/rng";
 import { createLeague, type CreateBlueprint } from "../league/create";
 import { defaultCup } from "../game/campaign";
+import { World } from "../game/world";
 import type { LeagueSystem } from "../model/types";
 
 /**
  * League creation wizard (§6): levels, divisions, teams, distribution, matches,
  * rules & toggles, optional cup. "Quick start" builds a sensible default league.
  */
-export function CreateWizard({ onCreate }: { onCreate: (league: LeagueSystem) => void }) {
+export function CreateWizard({ onCreate, onCreateWorld }: {
+  onCreate: (league: LeagueSystem) => void;
+  onCreateWorld: (world: World) => void;
+}) {
   const [name, setName] = useState("World of Sports League");
   const [seed, setSeed] = useState("kickoff");
   const [levels, setLevels] = useState(2);
@@ -110,6 +114,9 @@ export function CreateWizard({ onCreate }: { onCreate: (league: LeagueSystem) =>
 
       <div className="row" style={{ marginTop: "1rem" }}>
         <button className="btn primary" onClick={quickStart}>Create league ▸</button>
+        <button className="btn" onClick={() => onCreateWorld(new World({ seed, countryCount: 4, teamsPerDivision, teamsPerCountry: 2 }))}>
+          🌍 Create a World (4 countries + Champions Cup)
+        </button>
         <span className="muted">{levels * divisionsPerLevel * teamsPerDivision} teams total</span>
       </div>
     </div>
