@@ -8,8 +8,8 @@ Live status of the phased build so any session can resume cold. Updated in the
 | Phase | Status | Branch | Merged to main |
 |---|---|---|---|
 | 1 — Foundation (model, config, RNG, sharing, CI) | ✅ Done | `Phase-1` | ✅ |
-| 2 — Match engine (`sim/`) | ✅ Done | `Phase-2` | pending |
-| 3 — League play (`league/`, `stats/`) | ⬜ Pending | `Phase-3` | — |
+| 2 — Match engine (`sim/`) | ✅ Done | `Phase-2` | ✅ |
+| 3 — League play (`league/`, `stats/`) | ✅ Done | `Phase-3` | pending |
 | 4 — Systemic flavour (`systems/`) | ⬜ Pending | `Phase-4` | — |
 | 5 — Seasons, cups & full UI (`ui/`) | ⬜ Pending | `Phase-5` | — |
 
@@ -56,6 +56,28 @@ same seed ⇒ same random stream. ✔
 
 **Gate met:** match reproducible from seed; GDD worked example reproduces; no
 `Math.random`/wall-clock in `sim/`; unit + determinism tests green. ✔
+
+## Phase 3 — delivered
+
+- **`src/league/schedule.ts`** — circle-method round-robin, multi-leg (venue swap)
+  + mirroring (§6); byes for odd counts.
+- **`src/league/standings.ts`** — points from rules, tie-break chain (goal diff →
+  goals scored → head-to-head → deterministic coin toss), home/away sub-tables.
+- **`src/league/geographic.ts`** — random or geographic (latitude) division splits.
+- **`src/league/season.ts`** — create season, simulate one match / one round
+  (division or whole system) / whole season; deterministic per-match seeding
+  (order-independent results); per-round position history.
+- **`src/league/promotion.ts`** — promotion/relegation between levels, re-distributing
+  each level's pool while preserving division sizes.
+- **`src/league/create.ts`** — wizard blueprint → full league system.
+- **`src/league/summary.ts`** — season-end champions/promoted/relegated + threshold labels.
+- **`src/stats/records.ts`** — season archives, all-time table, championships,
+  extremes, streaks, head-to-head (§20).
+- **Tests (12 new, 47 total):** schedule integrity, standings ordering, full season
+  end-to-end, determinism across granularity, pro/rel, geographic split, records.
+
+**Gate met:** a full season simulates end-to-end with a correct table and correct
+promotion/relegation, browsable round-by-round; deterministic. ✔
 
 ## Discrepancies logged
 
