@@ -10,7 +10,9 @@ export function ResultsView({ campaign, divisionId, onOpenTeam }: {
   divisionId: string;
   onOpenTeam: (teamId: string) => void;
 }) {
-  const div = campaign.season.divisions.find((d) => d.divisionId === divisionId);
+  const groups = campaign.season.divisions.filter((d) => d.sourceDivisionId === divisionId);
+  const [groupKey, setGroupKey] = useState<string>(divisionId);
+  const div = groups.find((d) => d.divisionId === groupKey) ?? groups.find((d) => d.divisionId === divisionId) ?? groups[0];
   const [round, setRound] = useState(() => Math.max(1, div?.playedRounds ?? 1));
   if (!div) return null;
 
@@ -28,6 +30,15 @@ export function ResultsView({ campaign, divisionId, onOpenTeam }: {
           <button className="btn sm" disabled={shown >= maxRound} onClick={() => setRound(shown + 1)}>Next ▶</button>
         </div>
       </div>
+      {groups.length > 1 && (
+        <div className="tabs" style={{ marginTop: "0.4rem" }}>
+          {groups.map((g) => (
+            <button key={g.divisionId} className={`tab ${div.divisionId === g.divisionId ? "active" : ""}`} onClick={() => { setGroupKey(g.divisionId); setRound(1); }}>
+              {g.groupName ?? "Regular season"}
+            </button>
+          ))}
+        </div>
+      )}
 
       {matches.length === 0 ? (
         <p className="muted">No games played in this round yet.</p>

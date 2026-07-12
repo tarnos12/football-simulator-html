@@ -13,8 +13,8 @@ Live status of the phased build so any session can resume cold. Updated in the
 | 4 — Systemic flavour (`systems/`) | ✅ Done | `Phase-4` | ✅ |
 | 5 — Seasons, cups & full UI (`ui/`) | ✅ Done | `Phase-5` | ✅ |
 | 6 — Creator tools, editors & fuller stats | ✅ Done | `Phase-6` | pending |
-| 7 — Multi-phase leagues (§6,§15) | ⏳ Next | `Phase-7` | — |
-| 8 — International (§19) + cup refinements | ⬜ Pending | `Phase-8` | — |
+| 7 — Multi-phase leagues (§6,§15) | ✅ Done | `Phase-7` | pending |
+| 8 — International (§19) + cup refinements | ⏳ Next | `Phase-8` | — |
 
 ## Phase 1 — delivered
 
@@ -153,6 +153,27 @@ Phase 6 closes the self-contained ones:
 - **"Last 5 (Form)" table sub-view** (§21); **single-match simulation** (§4).
 - **Fuller §20 records** (highest/lowest winning points, title margins, points to stay up, most-points-relegated, goals/GD extremes, highest-scoring draw) + **browsable past-season final tables**.
 - Tests: 64 Vitest (6 new) + e2e extended (sim-match, edit grid, editable goal table). League-strength + goalTable plumbing added to the match engine for Phase 7/8.
+
+## Phase 7 — delivered (multi-phase leagues)
+
+- **Championship split (§6)** — `league/phases.ts`: after the regular season, a
+  division whose model phase defines a `split` regroups teams by position into
+  sub-league groups (top/bottom), carrying points forward (full/zero/half), each
+  group playing its own round-robin. Promotion/relegation, summary, and stats read
+  the **combined final ordering** (top group first). Wired through `campaign` (sim
+  match/round/season all advance phases). Creatable via the wizard's "Championship
+  split" toggle; UI shows Regular-season/Championship/Relegation group tabs in the
+  table & results, with combined-position threshold pills.
+- **Playoff series (§15)** — `league/playoff.ts`: single decider game, two-leg
+  aggregate, and best-of-N series (higher seed hosts the extra game; draws don't
+  count; ties → overtime/penalties). Deterministic; used by cups and available to
+  the engine.
+- Tests: 80 Vitest (8 new — split spawn, carry modes, champion-from-group, pro/rel,
+  determinism; playoff single/two-leg/best-of/determinism) + e2e for the split.
+
+**Partial / follow-up:** auto-scheduled promotion/relegation *qualification*
+playoffs between tiers (the primitive exists, not yet auto-run) and a
+season-boundary league-restructuring UI (change team/division counts) remain.
 
 ## Discrepancies logged
 

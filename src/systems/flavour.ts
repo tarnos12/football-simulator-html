@@ -43,7 +43,7 @@ export function flavourHooks(league: LeagueSystem): SimHooks {
 
   return {
     context: (homeId, awayId, div: DivisionSeason, season: SeasonState, lg: LeagueSystem) => {
-      const model = divModel(lg, div.divisionId);
+      const model = divModel(lg, div.sourceDivisionId);
       const rules = rulesFor(lg, model);
       const home = lg.teams[homeId];
       const away = lg.teams[awayId];
@@ -68,7 +68,7 @@ export function flavourHooks(league: LeagueSystem): SimHooks {
     afterMatch: (result, _div, _season, lg, rng) => {
       const home = lg.teams[result.homeId];
       const away = lg.teams[result.awayId];
-      const model = divModel(lg, _div.divisionId);
+      const model = divModel(lg, _div.sourceDivisionId);
       const rules = rulesFor(lg, model);
 
       result.attendance = computeAttendance(

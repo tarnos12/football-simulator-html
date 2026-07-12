@@ -15,6 +15,7 @@ import {
   simulateSystemRound,
   simulateWholeSeason,
   refreshDivisionTable,
+  advancePhases,
   isSeasonComplete,
   applyPromotionRelegation,
   seasonSummary,
@@ -56,7 +57,10 @@ export class Campaign {
   }
 
   simulateNextRound(): void {
-    if (!isSeasonComplete(this.season)) simulateSystemRound(this.league, this.season, this.hooks);
+    if (!isSeasonComplete(this.season)) {
+      simulateSystemRound(this.league, this.season, this.hooks);
+      advancePhases(this.league, this.season); // spawn split groups if a phase just ended
+    }
   }
 
   /** Simulate a single next match (§4): the next unplayed game of a division. */
@@ -77,11 +81,16 @@ export class Campaign {
       div.playedRounds = nextRound;
       div.table.forEach((row, i) => row.positionHistory.push(i + 1));
     }
+    advancePhases(this.league, this.season); // spawn split groups if a phase just ended
     this.season.complete = isSeasonComplete(this.season);
   }
 
+  /** Simulate the whole season, looping through any split phases. */
   simulateSeason(): void {
-    simulateWholeSeason(this.league, this.season, this.hooks);
+    let guard = 0;
+    do {
+      simulateWholeSeason(this.league, this.season, this.hooks);
+    } while (advancePhases(this.league, this.season) > 0 && guard++ < 20);
   }
 
   seasonComplete(): boolean {
@@ -106,7 +115,7 @@ export class Campaign {
 
   /** Archive the finished season, apply between-season changes + pro/rel, start next. */
   advanceToNextSeason(): void {
-    if (!isSeasonComplete(this.season)) simulateWholeSeason(this.league, this.season, this.hooks);
+    this.simulateSeason(); // ensures all phases (incl. splits) are complete
     this.playWholeCup();
     this.history.push(archiveSeason(this.league, this.season));
 

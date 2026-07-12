@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Campaign } from "../game/campaign";
 import { computeTable, computeFormTable, orderTable, goalDiff } from "../league/standings";
 import { thresholdLabelForPosition } from "../league/summary";
+import { combinedFinalTable } from "../league/phases";
 import { MiniJersey } from "./Jersey";
 import { PositionChart } from "./PositionChart";
 
@@ -21,10 +22,17 @@ export function StandingsTable({
 }) {
   const [venue, setVenue] = useState<Venue>("all");
   const [chartTeam, setChartTeam] = useState<string | null>(null);
-  const div = campaign.season.divisions.find((d) => d.divisionId === divisionId);
+  const [groupKey, setGroupKey] = useState<string>(divisionId);
+
+  // A division may have split into multiple phase groups (§6); let the user pick.
+  const groups = campaign.season.divisions.filter((d) => d.sourceDivisionId === divisionId);
+  const div = groups.find((d) => d.divisionId === groupKey) ?? groups.find((d) => d.divisionId === divisionId) ?? groups[0];
   if (!div) return null;
   const model = campaign.league.levels.flatMap((l) => l.divisions).find((d) => d.id === divisionId)!;
   const rules = { ...campaign.league.rules, ...(model.rulesOverride ?? {}) };
+
+  // Threshold pills reflect a team's position in the COMBINED final table.
+  const combinedPos = new Map(combinedFinalTable(campaign.season, divisionId).map((r, i) => [r.teamId, i + 1]));
 
   const rows =
     venue === "all"
@@ -48,8 +56,17 @@ export function StandingsTable({
           ))}
         </div>
       </div>
+      {groups.length > 1 && (
+        <div className="tabs" style={{ marginTop: "0.4rem" }}>
+          {groups.map((g) => (
+            <button key={g.divisionId} className={`tab ${div.divisionId === g.divisionId ? "active" : ""}`} onClick={() => setGroupKey(g.divisionId)}>
+              {g.groupName ?? "Regular season"}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="muted" style={{ fontSize: "0.82rem", marginBottom: "0.5rem" }}>
-        Round {div.playedRounds} / {div.totalRounds}
+        {div.groupName ? `${div.groupName} · ` : ""}Round {div.playedRounds} / {div.totalRounds}
       </div>
 
       <div className="table-wrap">
@@ -70,7 +87,9 @@ export function StandingsTable({
           <tbody>
             {rows.map((r, i) => {
               const pos = i + 1;
-              const label = venue === "all" ? thresholdLabelForPosition(campaign.league, divisionId, pos) : undefined;
+              const label = venue === "all"
+                ? thresholdLabelForPosition(campaign.league, divisionId, combinedPos.get(r.teamId) ?? pos)
+                : undefined;
               const move = movement(r.positionHistory);
               const markers = markerFor(r.teamId);
               return (
